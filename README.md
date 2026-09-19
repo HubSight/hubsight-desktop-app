@@ -107,6 +107,17 @@ Nếu Qt không nằm trong đường dẫn mặc định, truyền `CMAKE_PREFI
 cmake --preset default -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x.x/<platform>
 ```
 
+## File association `.hscfg`
+
+Ứng dụng đăng ký định dạng `.hscfg` khi được cài đặt:
+
+- macOS: khai báo document type trong bundle `Info.plist`.
+- Windows: ghi association vào `HKCU` trong bước `cmake --install`, không yêu cầu quyền administrator.
+- Linux: cài MIME type, `.desktop` entry và icon vào thư mục dữ liệu chuẩn.
+
+Khi mở một file `.hscfg`, app sẽ chuyển tới bước chọn file. Nếu HubSight đã
+chạy, file sẽ được chuyển vào instance hiện tại thay vì mở thêm process.
+
 ## Cấu trúc
 
 ```text

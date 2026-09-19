@@ -97,13 +97,27 @@ set(HUBSIGHT_TRANSLATIONS
     translations/hubsight_vi.ts
 )
 
+include(GNUInstallDirs)
+
 if (APPLE)
+    set(HUBSIGHT_MACOS_INFO_PLIST
+        "${CMAKE_CURRENT_BINARY_DIR}/HubSight-Info.plist")
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets/macos/Info.plist.in"
+        "${HUBSIGHT_MACOS_INFO_PLIST}"
+        @ONLY)
     list(APPEND HUBSIGHT_SOURCES assets/icons/macos/hubsight.icns)
     set_source_files_properties(assets/icons/macos/hubsight.icns PROPERTIES
         MACOSX_PACKAGE_LOCATION "Resources")
 endif ()
 
 if (WIN32)
+    set(HUBSIGHT_WINDOWS_ASSOCIATION_SCRIPT
+        "${CMAKE_CURRENT_BINARY_DIR}/register-hscfg-association.cmake")
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets/windows/register-hscfg-association.cmake.in"
+        "${HUBSIGHT_WINDOWS_ASSOCIATION_SCRIPT}"
+        @ONLY)
     list(APPEND HUBSIGHT_SOURCES src/hubsight.rc)
 endif ()
 
@@ -143,12 +157,11 @@ if (APPLE)
         MACOSX_BUNDLE_GUI_IDENTIFIER "com.hubsight.desktop"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_INFO_PLIST "${HUBSIGHT_MACOS_INFO_PLIST}"
     )
 elseif (WIN32)
     set_target_properties(HubSight PROPERTIES WIN32_EXECUTABLE TRUE)
 endif ()
-
-include(GNUInstallDirs)
 
 install(TARGETS HubSight
     BUNDLE DESTINATION .
@@ -162,4 +175,26 @@ if (UNIX AND NOT APPLE)
     install(FILES assets/icons/linux/hubsight-512x512.png
         DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/512x512/apps"
         RENAME hubsight.png)
+    install(FILES assets/linux/com.hubsight.desktop
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/applications")
+    install(FILES assets/linux/hubsight.xml
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/mime/packages")
+    install(CODE [[
+        find_program(HUBSIGHT_UPDATE_MIME_DATABASE update-mime-database)
+        if (HUBSIGHT_UPDATE_MIME_DATABASE)
+            execute_process(
+                COMMAND "${HUBSIGHT_UPDATE_MIME_DATABASE}"
+                        "${CMAKE_INSTALL_PREFIX}/share/mime")
+        endif ()
+        find_program(HUBSIGHT_UPDATE_DESKTOP_DATABASE update-desktop-database)
+        if (HUBSIGHT_UPDATE_DESKTOP_DATABASE)
+            execute_process(
+                COMMAND "${HUBSIGHT_UPDATE_DESKTOP_DATABASE}"
+                        "${CMAKE_INSTALL_PREFIX}/share/applications")
+        endif ()
+    ]])
+endif ()
+
+if (WIN32)
+    install(SCRIPT "${HUBSIGHT_WINDOWS_ASSOCIATION_SCRIPT}")
 endif ()

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=HubSight
+Comment=HubSight secure desktop workspace
+Exec=HubSight %F
+Icon=hubsight
+Terminal=false
+Categories=Utility;Security;
+MimeType=application/x-hubsight-config;
+StartupNotify=true
+StartupWMClass=HubSight

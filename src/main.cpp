@@ -4,8 +4,12 @@
 
 #include <QGuiApplication>
 #include <QDir>
+#include <QEvent>
 #include <QFileInfo>
+#include <QFileOpenEvent>
 #include <QIcon>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
@@ -17,7 +21,78 @@
 #include <QTimer>
 #include <QWindow>
 
+#include <functional>
+#include <utility>
+
 namespace {
+
+QString configurationPath(const QString &value)
+{
+    const QUrl inputUrl = QUrl::fromUserInput(value);
+    const QString path = inputUrl.isLocalFile() ? inputUrl.toLocalFile() : value;
+    const QFileInfo fileInfo(path);
+    if (fileInfo.suffix().compare(QStringLiteral("hscfg"), Qt::CaseInsensitive) != 0) {
+        return {};
+    }
+    return fileInfo.absoluteFilePath();
+}
+
+QStringList configurationPaths(const QStringList &arguments)
+{
+    QStringList paths;
+    for (const QString &argument : arguments) {
+        const QString path = configurationPath(argument);
+        if (!path.isEmpty()) {
+            paths.append(path);
+        }
+    }
+    return paths;
+}
+
+class HubSightApplication final : public QGuiApplication
+{
+public:
+    using QGuiApplication::QGuiApplication;
+
+    void setFileOpenHandler(std::function<void(const QString &)> handler)
+    {
+        m_fileOpenHandler = std::move(handler);
+        if (!m_fileOpenHandler) {
+            return;
+        }
+        const QStringList pendingPaths = std::exchange(m_pendingFilePaths, {});
+        for (const QString &path : pendingPaths) {
+            m_fileOpenHandler(path);
+        }
+    }
+
+protected:
+    bool event(QEvent *event) override
+    {
+        if (event->type() == QEvent::FileOpen) {
+            const auto *fileEvent = static_cast<QFileOpenEvent *>(event);
+            QString path = fileEvent->file();
+            if (path.isEmpty() && fileEvent->url().isLocalFile()) {
+                path = fileEvent->url().toLocalFile();
+            }
+            path = configurationPath(path);
+            if (path.isEmpty()) {
+                return true;
+            }
+            if (m_fileOpenHandler) {
+                m_fileOpenHandler(path);
+            } else {
+                m_pendingFilePaths.append(path);
+            }
+            return true;
+        }
+        return QGuiApplication::event(event);
+    }
+
+private:
+    std::function<void(const QString &)> m_fileOpenHandler;
+    QStringList m_pendingFilePaths;
+};
 
 QString singleInstanceLockPath()
 {
@@ -34,7 +109,7 @@ QString singleInstanceLockPath()
         .filePath(QStringLiteral("hubsight-desktop-instance.lock"));
 }
 
-bool notifyRunningInstance(const QString &serverName)
+bool notifyRunningInstance(const QString &serverName, const QStringList &filePaths)
 {
     QLocalSocket socket;
     socket.connectToServer(serverName, QIODevice::WriteOnly);
@@ -42,7 +117,12 @@ bool notifyRunningInstance(const QString &serverName)
         return false;
     }
 
-    socket.write("activate", 8);
+    QJsonObject request;
+    request.insert(QStringLiteral("command"), QStringLiteral("activate"));
+    if (!filePaths.isEmpty()) {
+        request.insert(QStringLiteral("file"), filePaths.constFirst());
+    }
+    socket.write(QJsonDocument(request).toJson(QJsonDocument::Compact));
     socket.flush();
     socket.waitForBytesWritten(250);
     socket.disconnectFromServer();
@@ -54,12 +134,14 @@ bool notifyRunningInstance(const QString &serverName)
 int main(int argc, char *argv[])
 {
     qputenv("QT_QUICK_CONTROLS_STYLE", QByteArrayLiteral("Basic"));
-    QGuiApplication application(argc, argv);
+    HubSightApplication application(argc, argv);
 
     QGuiApplication::setApplicationName(QStringLiteral("HubSight"));
     QGuiApplication::setApplicationVersion(QStringLiteral("0.1.0"));
     QGuiApplication::setOrganizationName(QStringLiteral("HubSight"));
     application.setWindowIcon(QIcon(QStringLiteral(":/icons/hubsight-512.png")));
+
+    const QStringList filePaths = configurationPaths(application.arguments().mid(1));
 
     const QString lockPath = singleInstanceLockPath();
     const QFileInfo lockInfo(lockPath);
@@ -71,7 +153,7 @@ int main(int argc, char *argv[])
 
     QLockFile instanceLock(lockPath);
     if (!instanceLock.tryLock(0)) {
-        notifyRunningInstance(QStringLiteral("HubSightDesktopSingleInstance"));
+        notifyRunningInstance(QStringLiteral("HubSightDesktopSingleInstance"), filePaths);
         return 0;
     }
 
@@ -87,6 +169,8 @@ int main(int argc, char *argv[])
     QPointer<QWindow> splashWindow;
     bool startupInProgress = true;
     bool activationPending = false;
+    QStringList pendingFilePaths;
+    std::function<void(const QString &)> openConfigurationFile;
     const auto activateMainWindow = [&]() {
         if (!mainWindow || startupInProgress) {
             activationPending = true;
@@ -104,7 +188,23 @@ int main(int argc, char *argv[])
                      &application, [&]() {
                          while (instanceServer.hasPendingConnections()) {
                              QLocalSocket *socket = instanceServer.nextPendingConnection();
+                             socket->waitForReadyRead(250);
+                             const QJsonDocument request =
+                                 QJsonDocument::fromJson(socket->readAll());
                              activateMainWindow();
+                             const QString filePath = request.isObject()
+                                                          ? configurationPath(
+                                                                request.object()
+                                                                    .value(QStringLiteral("file"))
+                                                                    .toString())
+                                                          : QString();
+                             if (!filePath.isEmpty()) {
+                                 if (openConfigurationFile) {
+                                     openConfigurationFile(filePath);
+                                 } else {
+                                     pendingFilePaths.append(filePath);
+                                 }
+                             }
                              socket->disconnectFromServer();
                              socket->deleteLater();
                          }
@@ -126,6 +226,20 @@ int main(int argc, char *argv[])
     if (!mainWindow) {
         return -1;
     }
+
+    openConfigurationFile = [&controller](const QString &path) {
+        controller.startSetup();
+        controller.loadConfigFile(QUrl::fromLocalFile(path));
+    };
+    application.setFileOpenHandler(openConfigurationFile);
+    for (const QString &path : filePaths) {
+        openConfigurationFile(path);
+    }
+    const QStringList queuedFilePaths = std::exchange(pendingFilePaths, {});
+    for (const QString &path : queuedFilePaths) {
+        openConfigurationFile(path);
+    }
+
     const int splashRootIndex = engine.rootObjects().size();
     engine.load(QUrl(QStringLiteral("qrc:/qml/Splash.qml")));
     if (engine.rootObjects().size() <= splashRootIndex) {

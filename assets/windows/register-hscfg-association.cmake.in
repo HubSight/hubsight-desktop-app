@@ -1,0 +1,19 @@
+if (WIN32)
+    set(HUBSIGHT_EXE "${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_BINDIR@/HubSight.exe")
+    file(TO_NATIVE_PATH "${HUBSIGHT_EXE}" HUBSIGHT_EXE_NATIVE)
+    set(HUBSIGHT_COMMAND "\"${HUBSIGHT_EXE_NATIVE}\" \"%1\"")
+    set(HUBSIGHT_ICON "${HUBSIGHT_EXE_NATIVE},0")
+
+    execute_process(COMMAND reg.exe ADD
+        "HKCU\\Software\\Classes\\.hscfg"
+        /ve /t REG_SZ /d "HubSight.Configuration" /f)
+    execute_process(COMMAND reg.exe ADD
+        "HKCU\\Software\\Classes\\HubSight.Configuration"
+        /ve /t REG_SZ /d "HubSight Configuration" /f)
+    execute_process(COMMAND reg.exe ADD
+        "HKCU\\Software\\Classes\\HubSight.Configuration\\DefaultIcon"
+        /ve /t REG_SZ /d "${HUBSIGHT_ICON}" /f)
+    execute_process(COMMAND reg.exe ADD
+        "HKCU\\Software\\Classes\\HubSight.Configuration\\shell\\open\\command"
+        /ve /t REG_SZ /d "${HUBSIGHT_COMMAND}" /f)
+endif ()

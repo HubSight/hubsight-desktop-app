@@ -14,10 +14,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick QuickControls2 QuickDialogs2)
+find_package(Qt6 REQUIRED COMPONENTS Gui Network Qml Quick QuickControls2 QuickDialogs2 LinguistTools)
 
 set(HUBSIGHT_SDK_PREFIX "" CACHE PATH
-    "Installation prefix containing HubSightAdminSdkConfig.cmake")
+    "Installation prefix containing HubSight Admin SDK and Preferences configs")
 set(HUBSIGHT_SDK_SOURCE_DIR "" CACHE PATH
     "Local HubSight qt-sdk source checkout")
 option(HUBSIGHT_FETCH_SDK
@@ -70,6 +70,7 @@ endif ()
 
 if (NOT HUBSIGHT_SDK_IN_TREE)
     find_package(HubSightAdminSdk 0.2 CONFIG REQUIRED)
+    find_package(HubSightPreferences 0.2 CONFIG REQUIRED)
 endif ()
 
 set(HUBSIGHT_SOURCES
@@ -92,6 +93,10 @@ set(HUBSIGHT_QML_SOURCES
     qml/components/NavButton.qml
 )
 
+set(HUBSIGHT_TRANSLATIONS
+    translations/hubsight_vi.ts
+)
+
 if (APPLE)
     list(APPEND HUBSIGHT_SOURCES assets/icons/macos/hubsight.icns)
     set_source_files_properties(assets/icons/macos/hubsight.icns PROPERTIES
@@ -105,16 +110,24 @@ endif ()
 add_executable(HubSight
     ${HUBSIGHT_SOURCES}
     ${HUBSIGHT_QML_SOURCES}
+    ${HUBSIGHT_TRANSLATIONS}
+)
+
+qt_add_translations(HubSight
+    TS_FILES ${HUBSIGHT_TRANSLATIONS}
+    RESOURCE_PREFIX "/i18n"
 )
 
 target_link_libraries(HubSight
     PRIVATE
         Qt6::Gui
+        Qt6::Network
         Qt6::Qml
         Qt6::Quick
         Qt6::QuickControls2
         Qt6::QuickDialogs2
         HubSight::AdminSdk
+        HubSight::Preferences
 )
 
 target_include_directories(HubSight

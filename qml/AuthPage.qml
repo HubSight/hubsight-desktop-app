@@ -21,21 +21,21 @@ Item {
         spacing: 14
 
         Label {
-            text: "HUBSIGHT  /  ADMIN ACCESS"
+            text: qsTr("HUBSIGHT  /  ADMIN ACCESS")
             color: root.theme.accentText
             font.family: "Roboto"
             font.pixelSize: 11
             font.weight: Font.DemiBold
         }
         Label {
-            text: "Sign in to HubSight"
+            text: qsTr("Sign in to HubSight")
             color: root.theme.text
             font.family: "Roboto"
             font.pixelSize: 24
             font.weight: Font.DemiBold
         }
         Label {
-            text: "Your server configuration is ready. Sign in to continue to the desktop workspace."
+            text: qsTr("Your server configuration is ready. Sign in to continue to the desktop workspace.")
             color: root.theme.textMuted
             font.family: "Roboto"
             font.pixelSize: 14
@@ -54,26 +54,26 @@ Item {
                 spacing: 12
 
                 Label {
-                    text: "Username"
+                    text: qsTr("Username")
                     color: root.theme.textSecondary
                     font.pixelSize: 13
                 }
                 AppTextField {
                     id: usernameField
                     theme: root.theme
-                    placeholderText: "Username or email"
+                    placeholderText: qsTr("Username or email")
                     Layout.fillWidth: true
                     onAccepted: passwordField.forceActiveFocus()
                 }
                 Label {
-                    text: "Password"
+                    text: qsTr("Password")
                     color: root.theme.textSecondary
                     font.pixelSize: 13
                 }
                 AppTextField {
                     id: passwordField
                     theme: root.theme
-                    placeholderText: "Password"
+                    placeholderText: qsTr("Password")
                     echoMode: TextInput.Password
                     Layout.fillWidth: true
                     onAccepted: root.controller.signIn(usernameField.text, passwordField.text)
@@ -88,7 +88,7 @@ Item {
                 }
                 AppButton {
                     id: signInButton
-                    text: root.controller.signingIn ? "Signing in…" : "Sign in"
+                    text: root.controller.signingIn ? qsTr("Signing in…") : qsTr("Sign in")
                     theme: root.theme
                     enabled: !root.controller.signingIn
                     Layout.fillWidth: true
@@ -122,13 +122,13 @@ Item {
             anchors.margins: 24
             spacing: 12
             Label {
-                text: "Two-factor authentication"
+                text: qsTr("Two-factor authentication")
                 color: root.theme.text
                 font.pixelSize: 18
                 font.weight: Font.DemiBold
             }
             Label {
-                text: "Enter the verification code from your authenticator."
+                text: qsTr("Enter the verification code from your authenticator.")
                 color: root.theme.textMuted
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
@@ -136,7 +136,7 @@ Item {
             AppTextField {
                 id: twoFactorField
                 theme: root.theme
-                placeholderText: "6-digit code"
+                placeholderText: qsTr("6-digit code")
                 maximumLength: 6
                 inputMethodHints: Qt.ImhDigitsOnly
                 Layout.fillWidth: true
@@ -146,13 +146,13 @@ Item {
                 Layout.fillWidth: true
                 Item { Layout.fillWidth: true }
                 AppButton {
-                    text: "Cancel"
+                    text: qsTr("Cancel")
                     theme: root.theme
                     primary: false
                     onClicked: root.controller.cancelTwoFactor()
                 }
                 AppButton {
-                    text: "Verify"
+                    text: qsTr("Verify")
                     theme: root.theme
                     enabled: twoFactorField.text.length > 0 && !root.controller.signingIn
                     onClicked: root.controller.submitTwoFactor(twoFactorField.text)

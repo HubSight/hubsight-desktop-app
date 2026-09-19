@@ -65,3 +65,4 @@ compile_commands.json
 
 # macOS
 .DS_Store
+npm_cache

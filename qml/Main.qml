@@ -12,9 +12,9 @@ ApplicationWindow {
     height: 760
     minimumWidth: 900
     minimumHeight: 620
-    title: appController.screen === 0 ? "HubSight — Configuration setup"
-                                      : appController.screen === 1 ? "HubSight — Sign in"
-                                                                    : "HubSight"
+    title: appController.screen === 0 ? qsTr("HubSight — Configuration setup")
+                                      : appController.screen === 1 ? qsTr("HubSight — Sign in")
+                                                                    : qsTr("HubSight")
     color: theme.background
 
     QtObject {

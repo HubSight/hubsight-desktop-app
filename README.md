@@ -6,8 +6,8 @@ Bộ khung ứng dụng desktop sử dụng Qt 6, C++20, CMake 3.21 trở lên v
 
 - CMake 3.21+
 - Trình biên dịch hỗ trợ C++20
-- Qt 6 với các module `Gui`, `Qml`, `Quick`, `QuickControls2` và `QuickDialogs2`
-- HubSight Qt SDK 0.2.0 với Admin `.hscfg` importer
+- Qt 6 với các module `Gui`, `Network`, `Qml`, `Quick`, `QuickControls2`, `QuickDialogs2` và `LinguistTools`
+- HubSight Qt SDK 0.2.0 với Admin `.hscfg` importer và `HubSight::Preferences`
 
 ## Cài đặt HubSight Qt SDK
 
@@ -38,6 +38,7 @@ Prefix phải chứa:
 
 ```text
 lib/cmake/HubSightAdminSdk/HubSightAdminSdkConfig.cmake
+lib/cmake/HubSightPreferences/HubSightPreferencesConfig.cmake
 ```
 
 Hoặc để CMake tự lấy tag `v0.2.0` từ GitHub và build cùng ứng dụng:
@@ -60,6 +61,23 @@ cmake --preset default
 cmake --build --preset default
 ```
 
+## i18n
+
+Ứng dụng sử dụng Qt Linguist (`QTranslator`, `qsTr()` và `tr()`). Tiếng Anh là
+ngôn ngữ nguồn; bản dịch tiếng Việt nằm trong
+`translations/hubsight_vi.ts` và được biên dịch thành `.qm`, nhúng vào bundle
+tự động bởi CMake.
+
+Khi thêm hoặc sửa chuỗi giao diện, cập nhật catalog bằng:
+
+```bash
+cmake --build build-debug --target HubSight_lupdate
+```
+
+Sau đó chỉnh bản dịch trong file `.ts` và build lại ứng dụng. Nút ngôn ngữ
+trong wizard đổi ngôn ngữ ngay khi chạy và lựa chọn được lưu bằng
+`HubSight::Preferences`.
+
 Chạy ứng dụng trên macOS:
 
 ```bash
@@ -71,6 +89,10 @@ Trên Linux, chạy binary:
 ```bash
 ./build-debug/HubSight
 ```
+
+Ứng dụng chỉ cho phép một instance chạy trong mỗi user session. Nếu mở lần
+thứ hai, process mới sẽ gửi yêu cầu activate đến instance đang chạy rồi thoát.
+Lock file và kênh IPC được tạo trong thư mục dữ liệu cục bộ của ứng dụng.
 
 Để tạo bản release:
 
@@ -101,6 +123,8 @@ cmake --preset default -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x.x/<platform>
 │   ├── Splash.qml
 │   ├── Workspace.qml
 │   └── components
+├── translations
+│   └── hubsight_vi.ts
 └── src
     ├── appcontroller.cpp
     ├── appcontroller.hpp
@@ -110,3 +134,8 @@ cmake --preset default -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x.x/<platform>
 
 UI được triển khai bằng QML/Qt Quick. `AppController` là lớp bridge C++ giữ
 toàn bộ logic HubSight Admin SDK, import `.hscfg`, PIN, đăng nhập và 2FA.
+
+Các thiết lập giao diện được lưu bởi `HubSight::Preferences` trong
+`preferences.json` dưới thư mục cấu hình ứng dụng. Bản build cũ dùng QSettings
+được migrate một lần khi file PreferenceStore chưa tồn tại; sau đó app chỉ ghi
+PreferenceStore.

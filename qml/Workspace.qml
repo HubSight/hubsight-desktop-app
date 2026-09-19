@@ -42,7 +42,7 @@ Item {
                         Layout.preferredHeight: 34
                     }
                     Label {
-                        text: "HubSight"
+                        text: qsTr("HubSight")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 16
@@ -51,7 +51,7 @@ Item {
                 }
                 Item { Layout.preferredHeight: 12 }
                 Label {
-                    text: "WORKSPACE"
+                    text: qsTr("WORKSPACE")
                     color: root.theme.textMuted
                     font.pixelSize: 10
                     font.weight: Font.DemiBold
@@ -60,7 +60,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 4
-                    model: ["Overview", "Preferences", "Help & About"]
+                    model: [qsTr("Overview"), qsTr("Preferences"), qsTr("Help & About")]
                     delegate: NavButton {
                         width: ListView.view.width
                         text: modelData
@@ -76,14 +76,14 @@ Item {
                 }
                 Label {
                     text: root.controller.userDisplayName.length > 0
-                          ? root.controller.userDisplayName : "Authenticated admin"
+                          ? root.controller.userDisplayName : qsTr("Authenticated admin")
                     color: root.theme.textSecondary
                     elide: Text.ElideRight
                     Layout.fillWidth: true
                     font.pixelSize: 12
                 }
                 Label {
-                    text: "Connected"
+                    text: qsTr("Connected")
                     color: root.theme.successText
                     font.pixelSize: 11
                 }
@@ -101,14 +101,14 @@ Item {
                     anchors.margins: 34
                     spacing: 16
                     Label {
-                        text: "Overview"
+                        text: qsTr("Overview")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: "Your HubSight desktop workspace is ready."
+                        text: qsTr("Your HubSight desktop workspace is ready.")
                         color: root.theme.textMuted
                         font.pixelSize: 14
                     }
@@ -121,13 +121,13 @@ Item {
                             anchors.margins: 20
                             spacing: 8
                             Label {
-                                text: "Connection active"
+                                text: qsTr("Connection active")
                                 color: root.theme.successText
                                 font.pixelSize: 13
                                 font.weight: Font.DemiBold
                             }
                             Label {
-                                text: "Authentication completed successfully. Camera, member and system tools will appear here."
+                                text: qsTr("Authentication completed successfully. Camera, member and system tools will appear here.")
                                 color: root.theme.textSecondary
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
@@ -145,20 +145,20 @@ Item {
                     anchors.margins: 34
                     spacing: 16
                     Label {
-                        text: "Preferences"
+                        text: qsTr("Preferences")
                         color: root.theme.text
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: "Manage desktop behavior and local presentation settings."
+                        text: qsTr("Manage desktop behavior and local presentation settings.")
                         color: root.theme.textMuted
                         font.pixelSize: 14
                     }
                     AppCard {
                         theme: root.theme
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 172
+                        Layout.preferredHeight: 226
                         ColumnLayout {
                             anchors.fill: parent
                             anchors.margins: 20
@@ -166,7 +166,24 @@ Item {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Launch at login"
+                                    text: qsTr("Theme")
+                                    color: root.theme.text
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    Layout.preferredWidth: 156
+                                    model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
+                                    currentIndex: root.controller.themeMode === "light"
+                                                  ? 1 : root.controller.themeMode === "dark" ? 2 : 0
+                                    onActivated: root.controller.setThemeMode(
+                                                     index === 1 ? "light"
+                                                                 : index === 2 ? "dark" : "system")
+                                }
+                            }
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Launch at login")
                                     color: root.theme.text
                                     Layout.fillWidth: true
                                 }
@@ -175,7 +192,7 @@ Item {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Show connection status"
+                                    text: qsTr("Show connection status")
                                     color: root.theme.text
                                     Layout.fillWidth: true
                                 }
@@ -193,7 +210,7 @@ Item {
                     anchors.margins: 34
                     spacing: 16
                     Label {
-                        text: "Help & About"
+                        text: qsTr("Help & About")
                         color: root.theme.text
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
@@ -207,18 +224,18 @@ Item {
                             anchors.margins: 20
                             spacing: 8
                             Label {
-                                text: "HubSight Desktop"
+                                text: qsTr("HubSight Desktop")
                                 color: root.theme.text
                                 font.pixelSize: 17
                                 font.weight: Font.DemiBold
                             }
                             Label {
-                                text: "Qt 6 · C++20 · HubSight Admin SDK"
+                                text: qsTr("Qt 6 · C++20 · HubSight Admin SDK")
                                 color: root.theme.textMuted
                                 font.pixelSize: 13
                             }
                             Label {
-                                text: "Import a verified .hscfg configuration, authenticate securely, and manage your HubSight environment from one desktop workspace."
+                                text: qsTr("Import a verified .hscfg configuration, authenticate securely, and manage your HubSight environment from one desktop workspace.")
                                 color: root.theme.textSecondary
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true

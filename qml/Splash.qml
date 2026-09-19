@@ -32,7 +32,7 @@ Window {
             }
             Text {
                 width: root.width - 72
-                text: "HubSight"
+                text: qsTr("HubSight")
                 color: appController.darkMode ? "#f8fafc" : "#0f172a"
                 font.family: "Roboto"
                 font.pixelSize: 22
@@ -41,7 +41,7 @@ Window {
             }
             Text {
                 width: root.width - 72
-                text: "Secure desktop workspace"
+                text: qsTr("Secure desktop workspace")
                 color: appController.darkMode ? "#94a3b8" : "#64748b"
                 font.family: "Roboto"
                 font.pixelSize: 13
@@ -50,7 +50,7 @@ Window {
             Text {
                 width: root.width - 72
                 topPadding: 8
-                text: "Preparing secure workspace…"
+                text: qsTr("Preparing secure workspace…")
                 color: appController.darkMode ? "#fb923c" : "#c2410c"
                 font.family: "Roboto"
                 font.pixelSize: 12

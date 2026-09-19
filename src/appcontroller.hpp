@@ -2,10 +2,12 @@
 
 #include <QByteArray>
 #include <QObject>
+#include <QTranslator>
 #include <QUrl>
 #include <QVariantList>
 
 #include <hubsight/admin/config/hscfg_types.h>
+#include <hubsight/preferences/preference_store.h>
 
 namespace HubSight::Admin {
 class AdminApplicationClient;
@@ -35,6 +37,7 @@ class AppController final : public QObject
     Q_PROPERTY(bool signingIn READ signingIn NOTIFY authStateChanged)
     Q_PROPERTY(bool twoFactorVisible READ twoFactorVisible NOTIFY twoFactorChanged)
     Q_PROPERTY(QString userDisplayName READ userDisplayName NOTIFY authStateChanged)
+    Q_PROPERTY(QString themeMode READ themeMode NOTIFY themeModeChanged)
     Q_PROPERTY(bool darkMode READ darkMode NOTIFY darkModeChanged)
     Q_PROPERTY(QString language READ language NOTIFY languageChanged)
     Q_PROPERTY(QString appVersion READ appVersion CONSTANT)
@@ -75,6 +78,7 @@ public:
     bool signingIn() const { return m_signingIn; }
     bool twoFactorVisible() const { return m_twoFactorVisible; }
     QString userDisplayName() const { return m_userDisplayName; }
+    QString themeMode() const { return m_themeMode; }
     bool darkMode() const { return m_darkMode; }
     QString language() const { return m_language; }
     QString appVersion() const;
@@ -90,6 +94,7 @@ public:
     Q_INVOKABLE void signIn(const QString &username, const QString &password);
     Q_INVOKABLE void submitTwoFactor(const QString &code);
     Q_INVOKABLE void cancelTwoFactor();
+    Q_INVOKABLE void setThemeMode(const QString &themeMode);
     Q_INVOKABLE void toggleTheme();
     Q_INVOKABLE void toggleLanguage();
 
@@ -103,6 +108,7 @@ signals:
     void summaryChanged();
     void authStateChanged();
     void twoFactorChanged();
+    void themeModeChanged();
     void darkModeChanged();
     void languageChanged();
     void uiTextChanged();
@@ -119,11 +125,13 @@ private:
     void clearError();
     void setBusy(bool busy, const QString &message = {});
     void setAuthStatus(const QString &message, bool error = false);
+    void initializePreferences();
     void validateAndBuildSummary();
+    QString formatAdminError(const HubSight::Admin::AdminError &error) const;
     QString formatImportError(const HubSight::Admin::HscfgImportResult &result) const;
     QString formatSize(qsizetype size) const;
     QString formatIntegrity(HubSight::Admin::HscfgIntegrityState state) const;
-    QString localized(const char *english, const char *vietnamese) const;
+    void installLanguage(const QString &language);
 
     HubSight::Admin::AdminApplicationClient *m_client = nullptr;
     Screen m_screen = ImportScreen;
@@ -143,8 +151,11 @@ private:
     bool m_signingIn = false;
     bool m_twoFactorVisible = false;
     QString m_userDisplayName;
+    QString m_themeMode = QStringLiteral("system");
     bool m_darkMode = false;
     QString m_language = QStringLiteral("en");
+    QTranslator m_translator;
+    HubSight::Preferences::PreferenceStore m_preferences;
 };
 
 } // namespace hubsight

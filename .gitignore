@@ -54,3 +54,14 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# IDE and editor files
+.cache/
+.qtcreator/
+.idea/
+.vscode/
+*.user
+*.user.*
+
+# macOS
+.DS_Store

@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="hubsight-512.png">../assets/icons/hubsight-512.png</file>
+    </qresource>
+    <qresource prefix="/qml">
+        <file alias="Main.qml">../qml/Main.qml</file>
+        <file alias="ImportWizard.qml">../qml/ImportWizard.qml</file>
+        <file alias="AuthPage.qml">../qml/AuthPage.qml</file>
+        <file alias="Workspace.qml">../qml/Workspace.qml</file>
+        <file alias="Splash.qml">../qml/Splash.qml</file>
+        <file alias="components/AppButton.qml">../qml/components/AppButton.qml</file>
+        <file alias="components/AppCard.qml">../qml/components/AppCard.qml</file>
+        <file alias="components/AppTextField.qml">../qml/components/AppTextField.qml</file>
+        <file alias="components/FeatureCard.qml">../qml/components/FeatureCard.qml</file>
+        <file alias="components/NavButton.qml">../qml/components/NavButton.qml</file>
+    </qresource>
+</RCC>

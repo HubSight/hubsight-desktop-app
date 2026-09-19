@@ -212,28 +212,54 @@
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="272"/>
-        <source>Import configuration file</source>
-        <translation>Nhập tệp cấu hình</translation>
+        <location filename="../qml/ImportWizard.qml" line="564"/>
+        <source>Choose configuration file</source>
+        <translation>Chọn tệp cấu hình</translation>
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="279"/>
-        <source>Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN.</source>
-        <translation>Chọn cấu hình HubSight Admin .hscfg. SDK sẽ giải mã và xác thực bằng mã PIN 6 chữ số.</translation>
+        <source>Select the .hscfg file provided by your administrator.</source>
+        <translation>Chọn tệp .hscfg do quản trị viên cung cấp.</translation>
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="312"/>
-        <source>Drop a .hscfg file here or choose one</source>
-        <translation>Thả tệp .hscfg vào đây hoặc chọn tệp</translation>
+        <source>Drag and drop your file here, or browse.</source>
+        <translation>Kéo thả tệp vào đây hoặc duyệt để chọn.</translation>
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="323"/>
-        <source>Encrypted Admin configuration profiles are supported.</source>
-        <translation>Hỗ trợ cấu hình Admin được mã hóa.</translation>
+        <source>Your file will be checked before it is used.</source>
+        <translation>Tệp sẽ được kiểm tra trước khi sử dụng.</translation>
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="331"/>
+        <source>Choose file</source>
+        <translation>Chọn tệp</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="566"/>
+        <source>Configuration files (*.hscfg)</source>
+        <translation>Tệp cấu hình (*.hscfg)</translation>
+    </message>
+    <message>
+        <source>Import configuration file</source>
+        <translation type="vanished">Nhập tệp cấu hình</translation>
+    </message>
+    <message>
+        <source>Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN.</source>
+        <translation type="vanished">Chọn cấu hình HubSight Admin .hscfg. SDK sẽ giải mã và xác thực bằng mã PIN 6 chữ số.</translation>
+    </message>
+    <message>
+        <source>Drop a .hscfg file here or choose one</source>
+        <translation type="vanished">Thả tệp .hscfg vào đây hoặc chọn tệp</translation>
+    </message>
+    <message>
+        <source>Encrypted Admin configuration profiles are supported.</source>
+        <translation type="vanished">Hỗ trợ cấu hình Admin được mã hóa.</translation>
+    </message>
+    <message>
         <source>Choose .hscfg file</source>
-        <translation>Chọn tệp .hscfg</translation>
+        <translation type="vanished">Chọn tệp .hscfg</translation>
     </message>
     <message>
         <location filename="../qml/ImportWizard.qml" line="349"/>
@@ -311,14 +337,12 @@
         <translation type="vanished">Phiên bản</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="564"/>
         <source>Select HubSight configuration</source>
-        <translation>Chọn cấu hình HubSight</translation>
+        <translation type="vanished">Chọn cấu hình HubSight</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="566"/>
         <source>HubSight configuration (*.hscfg)</source>
-        <translation>Cấu hình HubSight (*.hscfg)</translation>
+        <translation type="vanished">Cấu hình HubSight (*.hscfg)</translation>
     </message>
 </context>
 <context>

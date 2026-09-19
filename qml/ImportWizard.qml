@@ -269,14 +269,14 @@ Item {
                     anchors.margins: 40
                     spacing: 12
                     Label {
-                        text: qsTr("Import configuration file")
+                        text: qsTr("Choose configuration file")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: qsTr("Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN.")
+                        text: qsTr("Select the .hscfg file provided by your administrator.")
                         color: root.theme.textMuted
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
@@ -309,7 +309,7 @@ Item {
                             Label {
                                 text: root.controller.fileReady
                                       ? root.controller.fileName
-                                      : qsTr("Drop a .hscfg file here or choose one")
+                                      : qsTr("Drag and drop your file here, or browse.")
                                 color: root.theme.text
                                 font.pixelSize: 15
                                 font.weight: Font.DemiBold
@@ -320,7 +320,7 @@ Item {
                             Label {
                                 text: root.controller.fileReady
                                       ? root.controller.fileMeta
-                                      : qsTr("Encrypted Admin configuration profiles are supported.")
+                                      : qsTr("Your file will be checked before it is used.")
                                 color: root.theme.textMuted
                                 font.pixelSize: 13
                                 horizontalAlignment: Text.AlignHCenter
@@ -328,7 +328,7 @@ Item {
                                 Layout.fillWidth: true
                             }
                             AppButton {
-                                text: qsTr("Choose .hscfg file")
+                                text: qsTr("Choose file")
                                 theme: root.theme
                                 primary: false
                                 Layout.alignment: Qt.AlignHCenter
@@ -561,9 +561,9 @@ Item {
 
     FileDialog {
         id: fileDialog
-        title: qsTr("Select HubSight configuration")
+        title: qsTr("Choose configuration file")
         fileMode: FileDialog.OpenFile
-        nameFilters: [qsTr("HubSight configuration (*.hscfg)")]
+        nameFilters: [qsTr("Configuration files (*.hscfg)")]
         onAccepted: root.controller.loadConfigFile(selectedFile)
     }
 }

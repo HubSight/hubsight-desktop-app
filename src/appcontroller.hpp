@@ -20,8 +20,8 @@ class AppController final : public QObject
     Q_OBJECT
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(int importStep READ importStep NOTIFY importStepChanged)
-    Q_PROPERTY(QString stepTitle READ stepTitle NOTIFY importStepChanged)
-    Q_PROPERTY(QString stepSubtitle READ stepSubtitle CONSTANT)
+    Q_PROPERTY(QString stepTitle READ stepTitle NOTIFY uiTextChanged)
+    Q_PROPERTY(QString stepSubtitle READ stepSubtitle NOTIFY uiTextChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString busyMessage READ busyMessage NOTIFY busyChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
@@ -35,7 +35,9 @@ class AppController final : public QObject
     Q_PROPERTY(bool signingIn READ signingIn NOTIFY authStateChanged)
     Q_PROPERTY(bool twoFactorVisible READ twoFactorVisible NOTIFY twoFactorChanged)
     Q_PROPERTY(QString userDisplayName READ userDisplayName NOTIFY authStateChanged)
-    Q_PROPERTY(bool darkMode READ darkMode CONSTANT)
+    Q_PROPERTY(bool darkMode READ darkMode NOTIFY darkModeChanged)
+    Q_PROPERTY(QString language READ language NOTIFY languageChanged)
+    Q_PROPERTY(QString appVersion READ appVersion CONSTANT)
 
 public:
     enum Screen {
@@ -59,12 +61,12 @@ public:
     int screen() const { return m_screen; }
     int importStep() const { return m_importStep; }
     QString stepTitle() const;
-    QString stepSubtitle() const { return tr("HUBSIGHT SECURITY ENCLAVE"); }
+    QString stepSubtitle() const;
     bool busy() const { return m_busy; }
     QString busyMessage() const { return m_busyMessage; }
     QString errorMessage() const { return m_errorMessage; }
     QString fileName() const { return m_fileName; }
-    QString fileMeta() const { return m_fileMeta; }
+    QString fileMeta() const;
     bool fileReady() const { return !m_configBytes.isEmpty(); }
     QString pin() const { return m_pin; }
     QVariantList summaryRows() const { return m_summaryRows; }
@@ -73,7 +75,9 @@ public:
     bool signingIn() const { return m_signingIn; }
     bool twoFactorVisible() const { return m_twoFactorVisible; }
     QString userDisplayName() const { return m_userDisplayName; }
-    bool darkMode() const;
+    bool darkMode() const { return m_darkMode; }
+    QString language() const { return m_language; }
+    QString appVersion() const;
 
     void setPin(const QString &pin);
 
@@ -86,6 +90,8 @@ public:
     Q_INVOKABLE void signIn(const QString &username, const QString &password);
     Q_INVOKABLE void submitTwoFactor(const QString &code);
     Q_INVOKABLE void cancelTwoFactor();
+    Q_INVOKABLE void toggleTheme();
+    Q_INVOKABLE void toggleLanguage();
 
 signals:
     void screenChanged();
@@ -97,6 +103,9 @@ signals:
     void summaryChanged();
     void authStateChanged();
     void twoFactorChanged();
+    void darkModeChanged();
+    void languageChanged();
+    void uiTextChanged();
 
 private slots:
     void handleTwoFactor();
@@ -114,6 +123,7 @@ private:
     QString formatImportError(const HubSight::Admin::HscfgImportResult &result) const;
     QString formatSize(qsizetype size) const;
     QString formatIntegrity(HubSight::Admin::HscfgIntegrityState state) const;
+    QString localized(const char *english, const char *vietnamese) const;
 
     HubSight::Admin::AdminApplicationClient *m_client = nullptr;
     Screen m_screen = ImportScreen;
@@ -123,7 +133,6 @@ private:
     QString m_errorMessage;
     QByteArray m_configBytes;
     QString m_fileName;
-    QString m_fileMeta;
     QString m_pin;
     HubSight::Admin::HscfgConfig m_config;
     HubSight::Admin::HscfgIntegrityState m_integrity =
@@ -134,6 +143,8 @@ private:
     bool m_signingIn = false;
     bool m_twoFactorVisible = false;
     QString m_userDisplayName;
+    bool m_darkMode = false;
+    QString m_language = QStringLiteral("en");
 };
 
 } // namespace hubsight

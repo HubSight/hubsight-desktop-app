@@ -10,6 +10,9 @@ Item {
 
     property var controller
     property QtObject theme
+    function t(english, vietnamese) {
+        return controller.language === "vi" ? vietnamese : english
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -68,6 +71,29 @@ Item {
                 }
             }
             Item { Layout.fillWidth: true }
+            AppButton {
+                text: root.controller.language === "en" ? "VI" : "EN"
+                theme: root.theme
+                primary: false
+                compact: true
+                Layout.preferredWidth: 46
+                onClicked: root.controller.toggleLanguage()
+                ToolTip.visible: hovered
+                ToolTip.text: root.controller.language === "en"
+                              ? "Chuyển sang tiếng Việt" : "Switch to English"
+            }
+            AppButton {
+                text: root.controller.darkMode ? "☀" : "☾"
+                theme: root.theme
+                primary: false
+                compact: true
+                Layout.preferredWidth: 42
+                onClicked: root.controller.toggleTheme()
+                ToolTip.visible: hovered
+                ToolTip.text: root.controller.darkMode
+                              ? root.t("Switch to light theme", "Chuyển sang giao diện sáng")
+                              : root.t("Switch to dark theme", "Chuyển sang giao diện tối")
+            }
         }
 
         RowLayout {
@@ -116,78 +142,86 @@ Item {
             currentIndex: root.controller.importStep
 
             Item {
-                ScrollView {
+                ColumnLayout {
                     anchors.fill: parent
-                    clip: true
-                    ColumnLayout {
-                        width: Math.max(1, root.width - 80)
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        spacing: 18
+                    anchors.leftMargin: 40
+                    anchors.rightMargin: 40
+                    anchors.topMargin: 8
+                    anchors.bottomMargin: 10
+                    spacing: 18
 
-                        Item { Layout.preferredHeight: 8 }
-                        Image {
-                            source: "qrc:/icons/hubsight-512.png"
-                            sourceSize: Qt.size(92, 92)
-                            Layout.preferredWidth: 92
-                            Layout.preferredHeight: 92
-                            Layout.alignment: Qt.AlignHCenter
-                        }
-                        Label {
-                            text: "Welcome to HubSight"
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                            color: root.theme.text
-                            font.family: "Roboto"
-                            font.pixelSize: 24
-                            font.weight: Font.DemiBold
-                        }
-                        Label {
-                            text: "Import a secure server configuration to connect this desktop app to your HubSight environment."
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                            wrapMode: Text.WordWrap
-                            color: root.theme.textMuted
-                            font.family: "Roboto"
-                            font.pixelSize: 14
-                        }
-                        Item {
-                            Layout.fillWidth: true
-                            Layout.minimumWidth: 0
-                            Layout.preferredHeight: 112
-                            FeatureCard {
-                                id: encryptedCard
-                                theme: root.theme
-                                title: "Encrypted by default"
-                                description: "The PIN and decrypted profile stay in memory during import."
-                                x: 0
-                                width: Math.max(0, (parent.width - 24) / 3)
-                                height: parent.height
-                            }
-                            FeatureCard {
-                                theme: root.theme
-                                title: "Integrity checked"
-                                description: "The SDK validates the container and its content hash."
-                                x: encryptedCard.width + 12
-                                width: encryptedCard.width
-                                height: parent.height
-                            }
-                            FeatureCard {
-                                theme: root.theme
-                                title: "Zero manual setup"
-                                description: "Endpoints and credentials are read from one verified profile."
-                                x: (encryptedCard.width + 12) * 2
-                                width: encryptedCard.width
-                                height: parent.height
-                            }
-                        }
-                        AppButton {
-                            text: "Start setup  →"
+                    Image {
+                        source: "qrc:/icons/hubsight-512.png"
+                        sourceSize: Qt.size(92, 92)
+                        Layout.preferredWidth: 92
+                        Layout.preferredHeight: 92
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Label {
+                        text: root.t("Welcome to HubSight", "Chào mừng đến với HubSight")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                        color: root.theme.text
+                        font.family: "Roboto"
+                        font.pixelSize: 24
+                        font.weight: Font.DemiBold
+                    }
+                    Label {
+                        text: root.t(
+                                  "Import a secure server configuration to connect this desktop app to your HubSight environment.",
+                                  "Nhập cấu hình máy chủ bảo mật để kết nối ứng dụng desktop với hệ thống HubSight của bạn.")
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
+                        color: root.theme.textMuted
+                        font.family: "Roboto"
+                        font.pixelSize: 14
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 0
+                        Layout.preferredHeight: 156
+                        FeatureCard {
+                            id: encryptedCard
                             theme: root.theme
-                            Layout.alignment: Qt.AlignHCenter
-                            Layout.preferredWidth: 280
-                            onClicked: root.controller.startSetup()
+                            iconSource: "qrc:/icons/features/encrypted.svg"
+                            title: root.t("Encrypted by default", "Mã hóa mặc định")
+                            description: root.t(
+                                             "The PIN and decrypted profile stay in memory during import.",
+                                             "Mã PIN và cấu hình đã giải mã chỉ được giữ trong bộ nhớ khi nhập.")
+                            x: 0
+                            width: Math.max(0, (parent.width - 24) / 3)
+                            height: parent.height
                         }
-                        Item { Layout.preferredHeight: 10 }
+                        FeatureCard {
+                            theme: root.theme
+                            iconSource: "qrc:/icons/features/integrity.svg"
+                            title: root.t("Integrity checked", "Đã kiểm tra toàn vẹn")
+                            description: root.t(
+                                             "The SDK validates the container and its content hash.",
+                                             "SDK xác thực container và mã băm nội dung.")
+                            x: encryptedCard.width + 12
+                            width: encryptedCard.width
+                            height: parent.height
+                        }
+                        FeatureCard {
+                            theme: root.theme
+                            iconSource: "qrc:/icons/features/setup.svg"
+                            title: root.t("Zero manual setup", "Không cần thiết lập thủ công")
+                            description: root.t(
+                                             "Endpoints and credentials are read from one verified profile.",
+                                             "Các endpoint và thông tin xác thực được đọc từ một cấu hình đã xác minh.")
+                            x: (encryptedCard.width + 12) * 2
+                            width: encryptedCard.width
+                            height: parent.height
+                        }
+                    }
+                    AppButton {
+                        text: root.t("Start setup  →", "Bắt đầu thiết lập  →")
+                        theme: root.theme
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: 280
+                        onClicked: root.controller.startSetup()
                     }
                 }
             }
@@ -198,14 +232,16 @@ Item {
                     anchors.margins: 40
                     spacing: 12
                     Label {
-                        text: "Import configuration file"
+                        text: root.t("Import configuration file", "Nhập tệp cấu hình")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: "Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN."
+                        text: root.t(
+                                  "Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN.",
+                                  "Chọn cấu hình HubSight Admin .hscfg. SDK sẽ giải mã và xác thực bằng mã PIN 6 chữ số.")
                         color: root.theme.textMuted
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
@@ -236,7 +272,10 @@ Item {
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             Label {
-                                text: root.controller.fileReady ? root.controller.fileName : "Drop a .hscfg file here or choose one"
+                                text: root.controller.fileReady
+                                      ? root.controller.fileName
+                                      : root.t("Drop a .hscfg file here or choose one",
+                                               "Thả tệp .hscfg vào đây hoặc chọn tệp")
                                 color: root.theme.text
                                 font.pixelSize: 15
                                 font.weight: Font.DemiBold
@@ -245,7 +284,10 @@ Item {
                                 Layout.fillWidth: true
                             }
                             Label {
-                                text: root.controller.fileReady ? root.controller.fileMeta : "Encrypted Admin configuration profiles are supported."
+                                text: root.controller.fileReady
+                                      ? root.controller.fileMeta
+                                      : root.t("Encrypted Admin configuration profiles are supported.",
+                                               "Hỗ trợ cấu hình Admin được mã hóa.")
                                 color: root.theme.textMuted
                                 font.pixelSize: 13
                                 horizontalAlignment: Text.AlignHCenter
@@ -253,7 +295,7 @@ Item {
                                 Layout.fillWidth: true
                             }
                             AppButton {
-                                text: "Choose .hscfg file"
+                                text: root.t("Choose .hscfg file", "Chọn tệp .hscfg")
                                 theme: root.theme
                                 primary: false
                                 Layout.alignment: Qt.AlignHCenter
@@ -265,14 +307,14 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: "Back"
+                            text: root.t("Back", "Quay lại")
                             theme: root.theme
                             primary: false
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: "Continue to PIN  →"
+                            text: root.t("Continue to PIN  →", "Tiếp tục đến PIN  →")
                             theme: root.theme
                             enabled: root.controller.fileReady && !root.controller.busy
                             onClicked: root.controller.continueToPin()
@@ -287,21 +329,23 @@ Item {
                     anchors.margins: 40
                     spacing: 12
                     Label {
-                        text: "Enter your security PIN"
+                        text: root.t("Enter your security PIN", "Nhập mã PIN bảo mật")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: "Use the 6-digit PIN that was provided with this configuration profile. It is never stored."
+                        text: root.t(
+                                  "Use the 6-digit PIN that was provided with this configuration profile. It is never stored.",
+                                  "Sử dụng mã PIN 6 chữ số được cung cấp cùng cấu hình này. Mã PIN không được lưu.")
                         color: root.theme.textMuted
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                         font.pixelSize: 14
                     }
                     Label {
-                        text: "FILE  •  " + root.controller.fileName
+                        text: root.t("FILE", "TỆP") + "  •  " + root.controller.fileName
                         color: root.theme.successText
                         padding: 8
                         font.pixelSize: 11
@@ -317,7 +361,7 @@ Item {
                             width: Math.min(parent.width - 52, 520)
                             spacing: 12
                             Label {
-                                text: "6-DIGIT PASSCODE"
+                                text: root.t("6-DIGIT PASSCODE", "MÃ PIN 6 CHỮ SỐ")
                                 color: root.theme.textMuted
                                 font.pixelSize: 11
                                 font.weight: Font.DemiBold
@@ -344,14 +388,14 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: "Back"
+                            text: root.t("Back", "Quay lại")
                             theme: root.theme
                             primary: false
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: "Decrypt and validate  →"
+                            text: root.t("Decrypt and validate  →", "Giải mã và xác thực  →")
                             theme: root.theme
                             enabled: root.controller.pin.length === 6 && !root.controller.busy
                             onClicked: root.controller.validatePin()
@@ -366,21 +410,24 @@ Item {
                     anchors.margins: 40
                     spacing: 12
                     Label {
-                        text: "Review configuration"
+                        text: root.t("Review configuration", "Kiểm tra cấu hình")
                         color: root.theme.text
                         font.family: "Roboto"
                         font.pixelSize: 24
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: "The configuration was decrypted and validated. Review the destination before activating it."
+                        text: root.t(
+                                  "The configuration was decrypted and validated. Review the destination before activating it.",
+                                  "Cấu hình đã được giải mã và xác thực. Hãy kiểm tra đích trước khi kích hoạt.")
                         color: root.theme.textMuted
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                         font.pixelSize: 14
                     }
                     Label {
-                        text: "✓  CRYPTOGRAPHIC INTEGRITY CHECKED"
+                        text: root.t("✓  CRYPTOGRAPHIC INTEGRITY CHECKED",
+                                     "✓  ĐÃ KIỂM TRA TOÀN VẸN MẬT MÃ")
                         color: root.theme.successText
                         padding: 8
                         font.pixelSize: 11
@@ -422,14 +469,15 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: "Back to PIN"
+                            text: root.t("Back to PIN", "Quay lại PIN")
                             theme: root.theme
                             primary: false
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: "Activate and continue to sign in  →"
+                            text: root.t("Activate and continue to sign in  →",
+                                         "Kích hoạt và tiếp tục đăng nhập  →")
                             theme: root.theme
                             enabled: !root.controller.busy
                             onClicked: root.controller.confirmImport()
@@ -438,13 +486,35 @@ Item {
                 }
             }
         }
+
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: root.theme.borderSubtle
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                text: root.t("© 2026 HubSight. All rights reserved.",
+                             "© 2026 HubSight. Đã đăng ký bản quyền.")
+                color: root.theme.textMuted
+                font.pixelSize: 11
+            }
+            Item { Layout.fillWidth: true }
+            Label {
+                text: root.t("Version", "Phiên bản") + " " + root.controller.appVersion
+                color: root.theme.textMuted
+                font.pixelSize: 11
+            }
+        }
     }
 
     FileDialog {
         id: fileDialog
-        title: "Select HubSight configuration"
+        title: root.t("Select HubSight configuration", "Chọn cấu hình HubSight")
         fileMode: FileDialog.OpenFile
-        nameFilters: ["HubSight configuration (*.hscfg)"]
+        nameFilters: [root.t("HubSight configuration (*.hscfg)",
+                             "Cấu hình HubSight (*.hscfg)")]
         onAccepted: root.controller.loadConfigFile(selectedFile)
     }
 }

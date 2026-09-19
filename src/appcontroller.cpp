@@ -6,18 +6,49 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QCoreApplication>
 #include <QGuiApplication>
+#include <QLocale>
 #include <QPalette>
+#include <QSettings>
 #include <QStyleHints>
 #include <QTimer>
 
 namespace hubsight {
+namespace {
+
+bool systemPrefersDarkMode()
+{
+    const auto scheme = QGuiApplication::styleHints()->colorScheme();
+    if (scheme == Qt::ColorScheme::Dark) {
+        return true;
+    }
+    if (scheme == Qt::ColorScheme::Light) {
+        return false;
+    }
+    return QGuiApplication::palette().color(QPalette::Window).lightness() < 128;
+}
+
+} // namespace
 
 AppController::AppController(HubSight::Admin::AdminApplicationClient *client,
                              QObject *parent)
     : QObject(parent),
       m_client(client)
 {
+    QSettings settings;
+    settings.sync();
+    m_darkMode = settings.value(QStringLiteral("ui/darkMode"),
+                                systemPrefersDarkMode()).toBool();
+    const QString defaultLanguage = QLocale::system().language() == QLocale::Vietnamese
+                                        ? QStringLiteral("vi")
+                                        : QStringLiteral("en");
+    m_language = settings.value(QStringLiteral("ui/language"),
+                                defaultLanguage).toString();
+    if (m_language != QStringLiteral("vi") && m_language != QStringLiteral("en")) {
+        m_language = QStringLiteral("en");
+    }
+
     if (!m_client) {
         return;
     }
@@ -30,27 +61,39 @@ AppController::AppController(HubSight::Admin::AdminApplicationClient *client,
             this, &AppController::handleError);
 }
 
-bool AppController::darkMode() const
+QString AppController::localized(const char *english, const char *vietnamese) const
 {
-    const auto scheme = QGuiApplication::styleHints()->colorScheme();
-    if (scheme == Qt::ColorScheme::Dark) {
-        return true;
-    }
-    if (scheme == Qt::ColorScheme::Light) {
-        return false;
-    }
-    return QGuiApplication::palette().color(QPalette::Window).lightness() < 128;
+    return QString::fromUtf8(m_language == QStringLiteral("vi") ? vietnamese : english);
 }
 
 QString AppController::stepTitle() const
 {
     switch (m_importStep) {
-    case WelcomeStep: return tr("Configuration setup");
-    case FileStep: return tr("Local file import");
-    case PinStep: return tr("Decrypt configuration");
-    case SummaryStep: return tr("Review and activate");
+    case WelcomeStep: return localized("Configuration setup", "Thiết lập cấu hình");
+    case FileStep: return localized("Local file import", "Nhập tệp cấu hình");
+    case PinStep: return localized("Decrypt configuration", "Giải mã cấu hình");
+    case SummaryStep: return localized("Review and activate", "Kiểm tra và kích hoạt");
     }
-    return tr("Configuration setup");
+    return localized("Configuration setup", "Thiết lập cấu hình");
+}
+
+QString AppController::stepSubtitle() const
+{
+    return localized("HUBSIGHT SECURITY ENCLAVE", "VÙNG BẢO MẬT HUBSIGHT");
+}
+
+QString AppController::appVersion() const
+{
+    return QCoreApplication::applicationVersion();
+}
+
+QString AppController::fileMeta() const
+{
+    if (m_configBytes.isEmpty()) {
+        return {};
+    }
+    return localized("%1 • ready to decrypt", "%1 • sẵn sàng giải mã")
+        .arg(formatSize(m_configBytes.size()));
 }
 
 void AppController::setPin(const QString &pin)
@@ -80,6 +123,31 @@ void AppController::setImportStep(ImportStep step)
     m_importStep = step;
     clearError();
     emit importStepChanged();
+    emit uiTextChanged();
+}
+
+void AppController::toggleTheme()
+{
+    m_darkMode = !m_darkMode;
+    QSettings settings;
+    settings.setValue(QStringLiteral("ui/darkMode"), m_darkMode);
+    settings.sync();
+    emit darkModeChanged();
+}
+
+void AppController::toggleLanguage()
+{
+    m_language = m_language == QStringLiteral("en") ? QStringLiteral("vi")
+                                                     : QStringLiteral("en");
+    QSettings settings;
+    settings.setValue(QStringLiteral("ui/language"), m_language);
+    settings.sync();
+    emit languageChanged();
+    emit uiTextChanged();
+    emit fileChanged();
+    if (m_importStep == SummaryStep && !m_summaryRows.isEmpty()) {
+        validateAndBuildSummary();
+    }
 }
 
 void AppController::setError(const QString &message)
@@ -150,29 +218,32 @@ bool AppController::loadConfigFile(const QUrl &url)
         path = QUrl(path).toLocalFile();
     }
     if (path.isEmpty()) {
-        setError(tr("No configuration file was selected."));
+        setError(localized("No configuration file was selected.",
+                           "Chưa chọn tệp cấu hình."));
         return false;
     }
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        setError(tr("Unable to read the selected configuration file."));
+        setError(localized("Unable to read the selected configuration file.",
+                           "Không thể đọc tệp cấu hình đã chọn."));
         return false;
     }
     if (file.size() > 64 * 1024 * 1024) {
-        setError(tr("The configuration file is larger than the 64 MB limit."));
+        setError(localized("The configuration file is larger than the 64 MB limit.",
+                           "Tệp cấu hình vượt quá giới hạn 64 MB."));
         return false;
     }
 
     const QByteArray bytes = file.readAll();
     if (bytes.isEmpty()) {
-        setError(tr("The selected configuration is empty."));
+        setError(localized("The selected configuration is empty.",
+                           "Tệp cấu hình đã chọn đang trống."));
         return false;
     }
 
     m_configBytes = bytes;
     m_fileName = QFileInfo(path).fileName();
-    m_fileMeta = tr("%1 • ready to decrypt").arg(formatSize(bytes.size()));
     m_config = {};
     m_integrity = HubSight::Admin::HscfgIntegrityState::NotChecked;
     clearError();
@@ -184,16 +255,19 @@ void AppController::validatePin()
 {
     clearError();
     if (m_configBytes.isEmpty()) {
-        setError(tr("No configuration file has been selected."));
+        setError(localized("No configuration file has been selected.",
+                           "Chưa chọn tệp cấu hình."));
         return;
     }
     if (m_pin.size() != 6) {
-        setError(tr("Enter exactly 6 digits."));
+        setError(localized("Enter exactly 6 digits.",
+                           "Hãy nhập chính xác 6 chữ số."));
         return;
     }
 
     const QString pin = m_pin;
-    setBusy(true, tr("Decrypting and validating configuration…"));
+    setBusy(true, localized("Decrypting and validating configuration…",
+                            "Đang giải mã và xác thực cấu hình…"));
     QTimer::singleShot(0, this, [this, pin] {
         HubSight::Admin::HscfgImporter importer;
         const auto result = importer.importAdmin(m_configBytes, pin);
@@ -211,21 +285,21 @@ void AppController::validatePin()
 void AppController::validateAndBuildSummary()
 {
     m_summaryRows = {
-        QVariantMap{{QStringLiteral("label"), tr("Profile")},
+        QVariantMap{{QStringLiteral("label"), localized("Profile", "Hồ sơ")},
                     {QStringLiteral("value"), m_config.metadata.profile.isEmpty()
                                                     ? QStringLiteral("HubSight Admin")
                                                     : m_config.metadata.profile}},
-        QVariantMap{{QStringLiteral("label"), tr("Config ID")},
+        QVariantMap{{QStringLiteral("label"), localized("Config ID", "ID cấu hình")},
                     {QStringLiteral("value"), m_config.identity.clientId}},
-        QVariantMap{{QStringLiteral("label"), tr("Gateway")},
+        QVariantMap{{QStringLiteral("label"), localized("Gateway", "Cổng kết nối")},
                     {QStringLiteral("value"), m_config.urls.gatewayUrl.toString()}},
-        QVariantMap{{QStringLiteral("label"), tr("API base URL")},
+        QVariantMap{{QStringLiteral("label"), localized("API base URL", "URL API gốc")},
                     {QStringLiteral("value"), m_config.urls.apiBaseUrl.toString()}},
-        QVariantMap{{QStringLiteral("label"), tr("Relay WebSocket")},
+        QVariantMap{{QStringLiteral("label"), localized("Relay WebSocket", "WebSocket chuyển tiếp")},
                     {QStringLiteral("value"), m_config.urls.relayWebSocketUrl.toString()}},
-        QVariantMap{{QStringLiteral("label"), tr("Client")},
+        QVariantMap{{QStringLiteral("label"), localized("Client", "Ứng dụng khách")},
                     {QStringLiteral("value"), m_config.identity.clientName}},
-        QVariantMap{{QStringLiteral("label"), tr("Integrity")},
+        QVariantMap{{QStringLiteral("label"), localized("Integrity", "Tính toàn vẹn")},
                     {QStringLiteral("value"), formatIntegrity(m_integrity)}},
     };
     emit summaryChanged();
@@ -235,17 +309,19 @@ void AppController::validateAndBuildSummary()
 void AppController::confirmImport()
 {
     if (!m_client || m_configBytes.isEmpty()) {
-        setError(tr("The HubSight SDK is not available."));
+        setError(localized("The HubSight SDK is not available.",
+                           "HubSight SDK không khả dụng."));
         return;
     }
 
     clearError();
-    setBusy(true, tr("Activating configuration…"));
+    setBusy(true, localized("Activating configuration…", "Đang kích hoạt cấu hình…"));
     const bool success = m_client->importHscfg(m_configBytes, m_pin);
     setBusy(false);
     if (!success) {
-        setError(tr("The HubSight SDK could not activate this configuration. "
-                    "Please verify the file and PIN."));
+        setError(localized(
+            "The HubSight SDK could not activate this configuration. Please verify the file and PIN.",
+            "HubSight SDK không thể kích hoạt cấu hình này. Hãy kiểm tra lại tệp và mã PIN."));
         return;
     }
 
@@ -253,23 +329,26 @@ void AppController::confirmImport()
     m_pin.clear();
     emit fileChanged();
     emit pinChanged();
-    setAuthStatus(tr("Configuration imported. Sign in to continue."));
+    setAuthStatus(localized("Configuration imported. Sign in to continue.",
+                            "Đã nhập cấu hình. Hãy đăng nhập để tiếp tục."));
     setScreen(AuthScreen);
 }
 
 void AppController::signIn(const QString &username, const QString &password)
 {
     if (!m_client) {
-        setAuthStatus(tr("The HubSight SDK is not available."), true);
+        setAuthStatus(localized("The HubSight SDK is not available.",
+                                "HubSight SDK không khả dụng."), true);
         return;
     }
     if (username.trimmed().isEmpty() || password.isEmpty()) {
-        setAuthStatus(tr("Enter both username and password."), true);
+        setAuthStatus(localized("Enter both username and password.",
+                                "Hãy nhập tên đăng nhập và mật khẩu."), true);
         return;
     }
 
     m_signingIn = true;
-    setAuthStatus(tr("Signing in…"));
+    setAuthStatus(localized("Signing in…", "Đang đăng nhập…"));
     emit authStateChanged();
     m_client->signIn(username.trimmed(), password);
 }
@@ -277,14 +356,16 @@ void AppController::signIn(const QString &username, const QString &password)
 void AppController::submitTwoFactor(const QString &code)
 {
     if (!m_client || code.trimmed().isEmpty()) {
-        setAuthStatus(tr("Enter your two-factor code."), true);
+        setAuthStatus(localized("Enter your two-factor code.",
+                                "Hãy nhập mã xác thực hai bước."), true);
         return;
     }
 
     m_twoFactorVisible = false;
     emit twoFactorChanged();
     m_signingIn = true;
-    setAuthStatus(tr("Verifying two-factor code…"));
+    setAuthStatus(localized("Verifying two-factor code…",
+                            "Đang xác minh mã hai bước…"));
     emit authStateChanged();
     m_client->verifyTwoFactor(code.trimmed());
 }
@@ -294,7 +375,8 @@ void AppController::cancelTwoFactor()
     m_twoFactorVisible = false;
     emit twoFactorChanged();
     m_signingIn = false;
-    setAuthStatus(tr("Two-factor verification was cancelled."), true);
+    setAuthStatus(localized("Two-factor verification was cancelled.",
+                            "Đã hủy xác thực hai bước."), true);
 }
 
 void AppController::handleTwoFactor()
@@ -303,14 +385,16 @@ void AppController::handleTwoFactor()
     m_twoFactorVisible = true;
     emit twoFactorChanged();
     emit authStateChanged();
-    setAuthStatus(tr("Two-factor verification is required."));
+    setAuthStatus(localized("Two-factor verification is required.",
+                            "Yêu cầu xác thực hai bước."));
 }
 
 void AppController::handleAuthenticated(HubSight::Admin::AdminUser user)
 {
     m_signingIn = false;
     m_userDisplayName = user.fullName.isEmpty() ? user.username : user.fullName;
-    setAuthStatus(tr("Signed in as %1.").arg(m_userDisplayName));
+    setAuthStatus(localized("Signed in as %1.", "Đã đăng nhập với tên %1.")
+                      .arg(m_userDisplayName));
     emit authStateChanged();
     setScreen(WorkspaceScreen);
 }
@@ -318,7 +402,9 @@ void AppController::handleAuthenticated(HubSight::Admin::AdminUser user)
 void AppController::handleError(HubSight::Admin::AdminError error)
 {
     const QString message = error.developerMessage.isEmpty()
-                                ? tr("Sign-in failed (%1).").arg(error.serverCode)
+                                ? localized("Sign-in failed (%1).",
+                                            "Đăng nhập thất bại (%1).")
+                                      .arg(error.serverCode)
                                 : error.developerMessage;
     if (m_screen == AuthScreen || m_signingIn || m_twoFactorVisible) {
         m_signingIn = false;
@@ -334,9 +420,13 @@ QString AppController::formatImportError(
 {
     const QString code = HubSight::Admin::toString(result.error).toUpper();
     if (result.message.isEmpty()) {
-        return tr("Configuration import failed (%1).").arg(code);
+        return localized("Configuration import failed (%1).",
+                         "Nhập cấu hình thất bại (%1).")
+            .arg(code);
     }
-    return tr("Configuration import failed (%1): %2").arg(code, result.message);
+    return localized("Configuration import failed (%1): %2",
+                     "Nhập cấu hình thất bại (%1): %2")
+        .arg(code, result.message);
 }
 
 QString AppController::formatSize(qsizetype size) const
@@ -351,15 +441,16 @@ QString AppController::formatIntegrity(
 {
     switch (state) {
     case HubSight::Admin::HscfgIntegrityState::FullyVerified:
-        return tr("Fully verified");
+        return localized("Fully verified", "Đã xác minh đầy đủ");
     case HubSight::Admin::HscfgIntegrityState::ContentHashVerified:
-        return tr("Content hash verified");
+        return localized("Content hash verified", "Đã xác minh mã băm nội dung");
     case HubSight::Admin::HscfgIntegrityState::SignatureUnavailable:
-        return tr("Content hash verified; signature unavailable");
+        return localized("Content hash verified; signature unavailable",
+                         "Đã xác minh mã băm; không có chữ ký");
     case HubSight::Admin::HscfgIntegrityState::NotChecked:
-        return tr("Not checked");
+        return localized("Not checked", "Chưa kiểm tra");
     }
-    return tr("Unknown");
+    return localized("Unknown", "Không xác định");
 }
 
 } // namespace hubsight

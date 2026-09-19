@@ -1,6 +1,9 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="hubsight-512.png">../assets/icons/hubsight-512.png</file>
+        <file alias="features/encrypted.svg">../assets/icons/features/encrypted.svg</file>
+        <file alias="features/integrity.svg">../assets/icons/features/integrity.svg</file>
+        <file alias="features/setup.svg">../assets/icons/features/setup.svg</file>
     </qresource>
     <qresource prefix="/qml">
         <file alias="Main.qml">../qml/Main.qml</file>

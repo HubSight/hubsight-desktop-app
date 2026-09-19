@@ -73,183 +73,250 @@
 <context>
     <name>ImportWizard</name>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="49"/>
         <source>HUBSIGHT</source>
-        <translation>HUBSIGHT</translation>
+        <translation type="vanished">HUBSIGHT</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="80"/>
+        <location filename="../qml/ImportWizard.qml" line="44"/>
         <source>Switch to Vietnamese</source>
         <translation>Chuyển sang tiếng Việt</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="80"/>
+        <location filename="../qml/ImportWizard.qml" line="44"/>
         <source>Switch to English</source>
         <translation>Chuyển sang tiếng Anh</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="92"/>
+        <location filename="../qml/ImportWizard.qml" line="56"/>
         <source>Switch to light theme</source>
         <translation>Chuyển sang giao diện sáng</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="94"/>
+        <location filename="../qml/ImportWizard.qml" line="58"/>
         <source>Switch to dark theme</source>
         <translation>Chuyển sang giao diện tối</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="94"/>
+        <location filename="../qml/ImportWizard.qml" line="58"/>
         <source>Use system theme</source>
         <translation>Dùng giao diện hệ thống</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="160"/>
+        <location filename="../qml/ImportWizard.qml" line="206"/>
         <source>Welcome to HubSight</source>
         <translation>Chào mừng đến với HubSight</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="169"/>
+        <location filename="../qml/ImportWizard.qml" line="215"/>
         <source>Import a secure server configuration to connect this desktop app to your HubSight environment.</source>
         <translation>Nhập cấu hình máy chủ bảo mật để kết nối ứng dụng desktop với hệ thống HubSight của bạn.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="185"/>
         <source>Encrypted by default</source>
-        <translation>Mã hóa mặc định</translation>
+        <translation type="vanished">Mã hóa mặc định</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="186"/>
         <source>The PIN and decrypted profile stay in memory during import.</source>
-        <translation>Mã PIN và cấu hình đã giải mã chỉ được giữ trong bộ nhớ khi nhập.</translation>
+        <translation type="vanished">Mã PIN và cấu hình đã giải mã chỉ được giữ trong bộ nhớ khi nhập.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="194"/>
         <source>Integrity checked</source>
-        <translation>Đã kiểm tra toàn vẹn</translation>
+        <translation type="vanished">Đã kiểm tra toàn vẹn</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="195"/>
         <source>The SDK validates the container and its content hash.</source>
-        <translation>SDK xác thực container và mã băm nội dung.</translation>
+        <translation type="vanished">SDK xác thực container và mã băm nội dung.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="203"/>
         <source>Zero manual setup</source>
-        <translation>Không cần thiết lập thủ công</translation>
+        <translation type="vanished">Không cần thiết lập thủ công</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="204"/>
         <source>Endpoints and credentials are read from one verified profile.</source>
-        <translation>Các endpoint và thông tin xác thực được đọc từ một cấu hình đã xác minh.</translation>
+        <translation type="vanished">Các endpoint và thông tin xác thực được đọc từ một cấu hình đã xác minh.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="211"/>
+        <location filename="../qml/ImportWizard.qml" line="14"/>
+        <source>Configuration file</source>
+        <translation>Tệp cấu hình</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="15"/>
+        <source>Security PIN</source>
+        <translation>Mã PIN bảo mật</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="16"/>
+        <source>Review &amp; activate</source>
+        <translation>Kiểm tra &amp; kích hoạt</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="70"/>
+        <source>Setup progress</source>
+        <translation>Tiến trình thiết lập</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="78"/>
+        <source>Step %1 of %2</source>
+        <translation>Bước %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="136"/>
+        <source>Completed</source>
+        <translation>Hoàn tất</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="138"/>
+        <source>Current</source>
+        <translation>Hiện tại</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="138"/>
+        <source>Upcoming</source>
+        <translation>Sắp tới</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="231"/>
+        <source>Your data stays private</source>
+        <translation>Thông tin của bạn luôn riêng tư</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="232"/>
+        <source>Your PIN and configuration are protected during setup.</source>
+        <translation>Mã PIN và cấu hình được bảo vệ trong quá trình thiết lập.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="240"/>
+        <source>Checked for safety</source>
+        <translation>Đã kiểm tra an toàn</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="241"/>
+        <source>We verify your configuration before connecting.</source>
+        <translation>Chúng tôi kiểm tra cấu hình trước khi kết nối.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="249"/>
+        <source>Simple to get started</source>
+        <translation>Thiết lập thật đơn giản</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="250"/>
+        <source>Import once and connect automatically.</source>
+        <translation>Chỉ cần nhập một lần để kết nối tự động.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="257"/>
         <source>Start setup  →</source>
         <translation>Bắt đầu thiết lập  →</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="226"/>
+        <location filename="../qml/ImportWizard.qml" line="272"/>
         <source>Import configuration file</source>
         <translation>Nhập tệp cấu hình</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="233"/>
+        <location filename="../qml/ImportWizard.qml" line="279"/>
         <source>Select a HubSight Admin .hscfg profile. The SDK will decrypt and validate it with your 6-digit PIN.</source>
         <translation>Chọn cấu hình HubSight Admin .hscfg. SDK sẽ giải mã và xác thực bằng mã PIN 6 chữ số.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="266"/>
+        <location filename="../qml/ImportWizard.qml" line="312"/>
         <source>Drop a .hscfg file here or choose one</source>
         <translation>Thả tệp .hscfg vào đây hoặc chọn tệp</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="277"/>
+        <location filename="../qml/ImportWizard.qml" line="323"/>
         <source>Encrypted Admin configuration profiles are supported.</source>
         <translation>Hỗ trợ cấu hình Admin được mã hóa.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="285"/>
+        <location filename="../qml/ImportWizard.qml" line="331"/>
         <source>Choose .hscfg file</source>
         <translation>Chọn tệp .hscfg</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="297"/>
-        <location filename="../qml/ImportWizard.qml" line="376"/>
+        <location filename="../qml/ImportWizard.qml" line="349"/>
+        <location filename="../qml/ImportWizard.qml" line="436"/>
         <source>Back</source>
         <translation>Quay lại</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="304"/>
+        <location filename="../qml/ImportWizard.qml" line="359"/>
         <source>Continue to PIN  →</source>
         <translation>Tiếp tục đến PIN  →</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="319"/>
+        <location filename="../qml/ImportWizard.qml" line="373"/>
         <source>Enter your security PIN</source>
         <translation>Nhập mã PIN bảo mật</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="326"/>
+        <location filename="../qml/ImportWizard.qml" line="380"/>
         <source>Use the 6-digit PIN that was provided with this configuration profile. It is never stored.</source>
         <translation>Sử dụng mã PIN 6 chữ số được cung cấp cùng cấu hình này. Mã PIN không được lưu.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="333"/>
+        <location filename="../qml/ImportWizard.qml" line="387"/>
         <source>FILE</source>
         <translation>TỆP</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="349"/>
+        <location filename="../qml/ImportWizard.qml" line="403"/>
         <source>6-DIGIT PASSCODE</source>
         <translation>MÃ PIN 6 CHỮ SỐ</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="383"/>
+        <location filename="../qml/ImportWizard.qml" line="446"/>
         <source>Decrypt and validate  →</source>
         <translation>Giải mã và xác thực  →</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="398"/>
+        <location filename="../qml/ImportWizard.qml" line="460"/>
         <source>Review configuration</source>
         <translation>Kiểm tra cấu hình</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="405"/>
+        <location filename="../qml/ImportWizard.qml" line="467"/>
         <source>The configuration was decrypted and validated. Review the destination before activating it.</source>
         <translation>Cấu hình đã được giải mã và xác thực. Hãy kiểm tra đích trước khi kích hoạt.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="412"/>
+        <location filename="../qml/ImportWizard.qml" line="474"/>
         <source>✓  CRYPTOGRAPHIC INTEGRITY CHECKED</source>
         <translation>✓  ĐÃ KIỂM TRA TOÀN VẸN MẬT MÃ</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="454"/>
+        <location filename="../qml/ImportWizard.qml" line="522"/>
         <source>Back to PIN</source>
         <translation>Quay lại PIN</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="461"/>
+        <location filename="../qml/ImportWizard.qml" line="532"/>
         <source>Activate and continue to sign in  →</source>
         <translation>Kích hoạt và tiếp tục đăng nhập  →</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="479"/>
+        <location filename="../qml/ImportWizard.qml" line="549"/>
         <source>© 2026 HubSight. All rights reserved.</source>
         <translation>© 2026 HubSight. Đã đăng ký bản quyền.</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="485"/>
-        <source>Version</source>
-        <translation>Phiên bản</translation>
+        <location filename="../qml/ImportWizard.qml" line="555"/>
+        <source>Version: %1</source>
+        <translation>Phiên bản: %1</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="494"/>
+        <source>Version</source>
+        <translation type="vanished">Phiên bản</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportWizard.qml" line="564"/>
         <source>Select HubSight configuration</source>
         <translation>Chọn cấu hình HubSight</translation>
     </message>
     <message>
-        <location filename="../qml/ImportWizard.qml" line="496"/>
+        <location filename="../qml/ImportWizard.qml" line="566"/>
         <source>HubSight configuration (*.hscfg)</source>
         <translation>Cấu hình HubSight (*.hscfg)</translation>
     </message>
@@ -399,290 +466,284 @@
 <context>
     <name>hubsight::AppController</name>
     <message>
-        <location filename="../src/appcontroller.cpp" line="94"/>
-        <location filename="../src/appcontroller.cpp" line="99"/>
         <source>Configuration setup</source>
-        <translation>Thiết lập cấu hình</translation>
+        <translation type="vanished">Thiết lập cấu hình</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="95"/>
         <source>Local file import</source>
-        <translation>Nhập tệp cấu hình</translation>
+        <translation type="vanished">Nhập tệp cấu hình</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="96"/>
         <source>Decrypt configuration</source>
-        <translation>Giải mã cấu hình</translation>
+        <translation type="vanished">Giải mã cấu hình</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="97"/>
         <source>Review and activate</source>
-        <translation>Kiểm tra và kích hoạt</translation>
+        <translation type="vanished">Kiểm tra và kích hoạt</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="104"/>
         <source>HUBSIGHT SECURITY ENCLAVE</source>
-        <translation>VÙNG BẢO MẬT HUBSIGHT</translation>
+        <translation type="vanished">VÙNG BẢO MẬT HUBSIGHT</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="117"/>
+        <location filename="../src/appcontroller.cpp" line="113"/>
         <source>%1 • ready to decrypt</source>
         <translation>%1 • sẵn sàng giải mã</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="392"/>
+        <location filename="../src/appcontroller.cpp" line="383"/>
         <source>No configuration file was selected.</source>
         <translation>Chưa chọn tệp cấu hình.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="398"/>
+        <location filename="../src/appcontroller.cpp" line="389"/>
         <source>Unable to read the selected configuration file.</source>
         <translation>Không thể đọc tệp cấu hình đã chọn.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="402"/>
+        <location filename="../src/appcontroller.cpp" line="393"/>
         <source>The configuration file is larger than the 64 MB limit.</source>
         <translation>Tệp cấu hình vượt quá giới hạn 64 MB.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="408"/>
+        <location filename="../src/appcontroller.cpp" line="399"/>
         <source>The selected configuration is empty.</source>
         <translation>Tệp cấu hình đã chọn đang trống.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="425"/>
+        <location filename="../src/appcontroller.cpp" line="415"/>
         <source>No configuration file has been selected.</source>
         <translation>Chưa chọn tệp cấu hình.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="429"/>
+        <location filename="../src/appcontroller.cpp" line="419"/>
         <source>Enter exactly 6 digits.</source>
         <translation>Hãy nhập chính xác 6 chữ số.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="434"/>
+        <location filename="../src/appcontroller.cpp" line="424"/>
         <source>Decrypting and validating configuration…</source>
         <translation>Đang giải mã và xác thực cấu hình…</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="452"/>
+        <location filename="../src/appcontroller.cpp" line="441"/>
         <source>Profile</source>
         <translation>Hồ sơ</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="454"/>
+        <location filename="../src/appcontroller.cpp" line="443"/>
         <source>HubSight Admin</source>
         <translation>HubSight Admin</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="456"/>
+        <location filename="../src/appcontroller.cpp" line="445"/>
         <source>Config ID</source>
         <translation>ID cấu hình</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="458"/>
+        <location filename="../src/appcontroller.cpp" line="448"/>
         <source>Gateway</source>
         <translation>Cổng kết nối</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="460"/>
+        <location filename="../src/appcontroller.cpp" line="451"/>
         <source>API base URL</source>
         <translation>URL API gốc</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="462"/>
+        <location filename="../src/appcontroller.cpp" line="453"/>
         <source>Relay WebSocket</source>
         <translation>WebSocket chuyển tiếp</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="464"/>
+        <location filename="../src/appcontroller.cpp" line="456"/>
         <source>Client</source>
         <translation>Ứng dụng khách</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="466"/>
+        <location filename="../src/appcontroller.cpp" line="458"/>
         <source>Integrity</source>
         <translation>Tính toàn vẹn</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="476"/>
-        <location filename="../src/appcontroller.cpp" line="500"/>
+        <location filename="../src/appcontroller.cpp" line="467"/>
+        <location filename="../src/appcontroller.cpp" line="491"/>
         <source>The HubSight SDK is not available.</source>
         <translation>HubSight SDK không khả dụng.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="481"/>
+        <location filename="../src/appcontroller.cpp" line="472"/>
         <source>Activating configuration…</source>
         <translation>Đang kích hoạt cấu hình…</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="485"/>
+        <location filename="../src/appcontroller.cpp" line="476"/>
         <source>The HubSight SDK could not activate this configuration. Please verify the file and PIN.</source>
         <translation>HubSight SDK không thể kích hoạt cấu hình này. Hãy kiểm tra lại tệp và mã PIN.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="493"/>
+        <location filename="../src/appcontroller.cpp" line="485"/>
         <source>Configuration imported. Sign in to continue.</source>
         <translation>Đã nhập cấu hình. Hãy đăng nhập để tiếp tục.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="504"/>
+        <location filename="../src/appcontroller.cpp" line="495"/>
         <source>Enter both username and password.</source>
         <translation>Hãy nhập tên đăng nhập và mật khẩu.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="509"/>
+        <location filename="../src/appcontroller.cpp" line="500"/>
         <source>Signing in…</source>
         <translation>Đang đăng nhập…</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="517"/>
+        <location filename="../src/appcontroller.cpp" line="507"/>
         <source>Enter your two-factor code.</source>
         <translation>Hãy nhập mã xác thực hai bước.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="524"/>
+        <location filename="../src/appcontroller.cpp" line="514"/>
         <source>Verifying two-factor code…</source>
         <translation>Đang xác minh mã hai bước…</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="534"/>
+        <location filename="../src/appcontroller.cpp" line="523"/>
         <source>Two-factor verification was cancelled.</source>
         <translation>Đã hủy xác thực hai bước.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="543"/>
+        <location filename="../src/appcontroller.cpp" line="531"/>
         <source>Two-factor verification is required.</source>
         <translation>Yêu cầu xác thực hai bước.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="550"/>
+        <location filename="../src/appcontroller.cpp" line="537"/>
         <source>Signed in as %1.</source>
         <translation>Đã đăng nhập với tên %1.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="577"/>
+        <location filename="../src/appcontroller.cpp" line="562"/>
         <source>Sign-in failed.</source>
         <translation>Đăng nhập thất bại.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="578"/>
+        <location filename="../src/appcontroller.cpp" line="563"/>
         <source>Sign-in failed (%1).</source>
         <translation>Đăng nhập thất bại (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="581"/>
+        <location filename="../src/appcontroller.cpp" line="567"/>
         <source>You are not authorized to access this HubSight environment.</source>
         <translation>Bạn không có quyền truy cập môi trường HubSight này.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="582"/>
+        <location filename="../src/appcontroller.cpp" line="568"/>
         <source>You are not authorized to access this HubSight environment (%1).</source>
         <translation>Bạn không có quyền truy cập môi trường HubSight này (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="584"/>
+        <location filename="../src/appcontroller.cpp" line="572"/>
         <source>Unable to reach the HubSight service.</source>
         <translation>Không thể kết nối đến dịch vụ HubSight.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="585"/>
+        <location filename="../src/appcontroller.cpp" line="573"/>
         <source>Unable to reach the HubSight service (%1).</source>
         <translation>Không thể kết nối đến dịch vụ HubSight (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="587"/>
+        <location filename="../src/appcontroller.cpp" line="576"/>
         <source>HubSight is temporarily unavailable.</source>
         <translation>HubSight tạm thời không khả dụng.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="588"/>
+        <location filename="../src/appcontroller.cpp" line="577"/>
         <source>HubSight is temporarily unavailable (%1).</source>
         <translation>HubSight tạm thời không khả dụng (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="590"/>
+        <location filename="../src/appcontroller.cpp" line="580"/>
         <source>HubSight configuration is invalid.</source>
         <translation>Cấu hình HubSight không hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="591"/>
+        <location filename="../src/appcontroller.cpp" line="581"/>
         <source>HubSight configuration is invalid (%1).</source>
         <translation>Cấu hình HubSight không hợp lệ (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="598"/>
-        <location filename="../src/appcontroller.cpp" line="601"/>
+        <location filename="../src/appcontroller.cpp" line="588"/>
+        <location filename="../src/appcontroller.cpp" line="591"/>
         <source>HubSight request failed.</source>
         <translation>Yêu cầu HubSight thất bại.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="599"/>
+        <location filename="../src/appcontroller.cpp" line="589"/>
         <source>HubSight request failed (%1).</source>
         <translation>Yêu cầu HubSight thất bại (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="611"/>
+        <location filename="../src/appcontroller.cpp" line="600"/>
         <source>The configuration importer is unavailable in this build.</source>
         <translation>Bộ nhập cấu hình không khả dụng trong bản build này.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="614"/>
+        <location filename="../src/appcontroller.cpp" line="603"/>
         <source>This is not a valid HubSight Admin configuration file.</source>
         <translation>Đây không phải là tệp cấu hình HubSight Admin hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="617"/>
+        <location filename="../src/appcontroller.cpp" line="606"/>
         <source>The configuration container is invalid or too large.</source>
         <translation>Container cấu hình không hợp lệ hoặc quá lớn.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="620"/>
+        <location filename="../src/appcontroller.cpp" line="609"/>
         <source>The configuration PIN must contain exactly six digits.</source>
         <translation>Mã PIN cấu hình phải gồm đúng sáu chữ số.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="623"/>
+        <location filename="../src/appcontroller.cpp" line="613"/>
         <source>The configuration could not be decrypted. Check the PIN and file.</source>
         <translation>Không thể giải mã cấu hình. Hãy kiểm tra mã PIN và tệp.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="626"/>
+        <location filename="../src/appcontroller.cpp" line="616"/>
         <source>The encrypted configuration payload is invalid.</source>
         <translation>Dữ liệu cấu hình đã mã hóa không hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="629"/>
+        <location filename="../src/appcontroller.cpp" line="619"/>
         <source>The configuration metadata is invalid.</source>
         <translation>Metadata của cấu hình không hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="632"/>
+        <location filename="../src/appcontroller.cpp" line="622"/>
         <source>The configuration is missing required data.</source>
         <translation>Cấu hình đang thiếu dữ liệu bắt buộc.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="635"/>
+        <location filename="../src/appcontroller.cpp" line="625"/>
         <source>The configuration does not match the HubSight Admin profile requirements.</source>
         <translation>Cấu hình không đáp ứng yêu cầu của hồ sơ HubSight Admin.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="638"/>
+        <location filename="../src/appcontroller.cpp" line="629"/>
         <source>The configuration content hash is missing.</source>
         <translation>Cấu hình đang thiếu mã băm nội dung.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="641"/>
+        <location filename="../src/appcontroller.cpp" line="632"/>
         <source>The configuration content hash does not match.</source>
         <translation>Mã băm nội dung cấu hình không khớp.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="644"/>
+        <location filename="../src/appcontroller.cpp" line="635"/>
         <source>The configuration signature is invalid.</source>
         <translation>Chữ ký cấu hình không hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="647"/>
+        <location filename="../src/appcontroller.cpp" line="638"/>
         <source>The configuration could not be imported.</source>
         <translation>Không thể nhập cấu hình.</translation>
     </message>
@@ -691,42 +752,42 @@
         <translation type="vanished">Nhập cấu hình thất bại (%1).</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="650"/>
+        <location filename="../src/appcontroller.cpp" line="641"/>
         <source>Configuration import failed (%1): %2</source>
         <translation>Nhập cấu hình thất bại (%1): %2</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="656"/>
+        <location filename="../src/appcontroller.cpp" line="646"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="657"/>
+        <location filename="../src/appcontroller.cpp" line="647"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="665"/>
+        <location filename="../src/appcontroller.cpp" line="655"/>
         <source>Fully verified</source>
         <translation>Đã xác minh đầy đủ</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="667"/>
+        <location filename="../src/appcontroller.cpp" line="657"/>
         <source>Content hash verified</source>
         <translation>Đã xác minh mã băm nội dung</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="669"/>
+        <location filename="../src/appcontroller.cpp" line="659"/>
         <source>Content hash verified; signature unavailable</source>
         <translation>Đã xác minh mã băm; không có chữ ký</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="671"/>
+        <location filename="../src/appcontroller.cpp" line="661"/>
         <source>Not checked</source>
         <translation>Chưa kiểm tra</translation>
     </message>
     <message>
-        <location filename="../src/appcontroller.cpp" line="673"/>
+        <location filename="../src/appcontroller.cpp" line="663"/>
         <source>Unknown</source>
         <translation>Không xác định</translation>
     </message>

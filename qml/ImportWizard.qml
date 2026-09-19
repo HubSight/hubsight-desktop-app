@@ -10,6 +10,12 @@ Item {
 
     property var controller
     property QtObject theme
+    property var progressSteps: [
+        qsTr("Configuration file"),
+        qsTr("Security PIN"),
+        qsTr("Review & activate")
+    ]
+    property int currentProgressStep: root.controller.importStep - 1
 
     Rectangle {
         anchors.fill: parent
@@ -25,48 +31,6 @@ Item {
             Layout.fillWidth: true
             spacing: 12
 
-            AppButton {
-                visible: root.controller.importStep > 0
-                text: "‹"
-                theme: root.theme
-                primary: false
-                compact: true
-                Layout.preferredWidth: 40
-                onClicked: root.controller.goBack()
-            }
-
-            Image {
-                source: "qrc:/icons/hubsight-512.png"
-                sourceSize: Qt.size(32, 32)
-                Layout.preferredWidth: 32
-                Layout.preferredHeight: 32
-                fillMode: Image.PreserveAspectFit
-            }
-
-            ColumnLayout {
-                spacing: 1
-                Label {
-                    text: qsTr("HUBSIGHT")
-                    color: root.theme.text
-                    font.family: "Roboto"
-                    font.pixelSize: 12
-                    font.weight: Font.DemiBold
-                }
-                Label {
-                    text: root.controller.stepTitle
-                    color: root.theme.textSecondary
-                    font.family: "Roboto"
-                    font.pixelSize: 15
-                    font.weight: Font.DemiBold
-                }
-                Label {
-                    text: root.controller.stepSubtitle
-                    color: root.theme.textMuted
-                    font.family: "Roboto"
-                    font.pixelSize: 10
-                    font.weight: Font.DemiBold
-                }
-            }
             Item { Layout.fillWidth: true }
             AppButton {
                 text: root.controller.language === "en" ? "VI" : "EN"
@@ -95,18 +59,100 @@ Item {
             }
         }
 
-        RowLayout {
+        ColumnLayout {
             visible: root.controller.importStep > 0
             Layout.fillWidth: true
-            spacing: 6
-            Repeater {
-                model: 3
-                delegate: Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 4
-                    radius: 2
-                    color: index < root.controller.importStep
-                           ? root.theme.accent : root.theme.surfaceMuted
+            spacing: 8
+
+            RowLayout {
+                Layout.fillWidth: true
+                Label {
+                    text: qsTr("Setup progress")
+                    color: root.theme.textSecondary
+                    font.family: "Roboto"
+                    font.pixelSize: 11
+                    font.weight: Font.DemiBold
+                }
+                Item { Layout.fillWidth: true }
+                Label {
+                    text: qsTr("Step %1 of %2")
+                          .arg(root.currentProgressStep + 1)
+                          .arg(root.progressSteps.length)
+                    color: root.theme.textMuted
+                    font.family: "Roboto"
+                    font.pixelSize: 11
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 6
+                Repeater {
+                    model: root.progressSteps
+                    delegate: RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        Rectangle {
+                            Layout.preferredWidth: 34
+                            Layout.preferredHeight: 34
+                            radius: 17
+                            color: index < root.currentProgressStep
+                                   ? root.theme.accent
+                                   : index === root.currentProgressStep
+                                     ? root.theme.accentSoft : root.theme.surfaceMuted
+                            border.width: index === root.currentProgressStep ? 2 : 1
+                            border.color: index <= root.currentProgressStep
+                                          ? root.theme.accent : root.theme.borderSubtle
+
+                            Label {
+                                anchors.centerIn: parent
+                                text: index < root.currentProgressStep ? "✓" : (index + 1)
+                                color: index < root.currentProgressStep
+                                       ? "#ffffff"
+                                       : index === root.currentProgressStep
+                                         ? root.theme.accentText : root.theme.textMuted
+                                font.family: "Roboto"
+                                font.pixelSize: 13
+                                font.weight: Font.DemiBold
+                            }
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 1
+                            Label {
+                                text: modelData
+                                color: index === root.currentProgressStep
+                                       ? root.theme.text : root.theme.textSecondary
+                                font.family: "Roboto"
+                                font.pixelSize: 11
+                                font.weight: Font.DemiBold
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
+                            Label {
+                                text: index < root.currentProgressStep
+                                      ? qsTr("Completed")
+                                      : index === root.currentProgressStep
+                                        ? qsTr("Current") : qsTr("Upcoming")
+                                color: index === root.currentProgressStep
+                                       ? root.theme.accentText : root.theme.textMuted
+                                font.family: "Roboto"
+                                font.pixelSize: 10
+                            }
+                        }
+
+                        Rectangle {
+                            visible: index < root.progressSteps.length - 1
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 18
+                            Layout.preferredHeight: 3
+                            radius: 2
+                            color: index < root.currentProgressStep
+                                   ? root.theme.accent : root.theme.surfaceMuted
+                        }
+                    }
                 }
             }
         }
@@ -182,8 +228,8 @@ Item {
                             id: encryptedCard
                             theme: root.theme
                             iconSource: "qrc:/icons/features/encrypted.svg"
-                            title: qsTr("Encrypted by default")
-                            description: qsTr("The PIN and decrypted profile stay in memory during import.")
+                            title: qsTr("Your data stays private")
+                            description: qsTr("Your PIN and configuration are protected during setup.")
                             x: 0
                             width: Math.max(0, (parent.width - 24) / 3)
                             height: parent.height
@@ -191,8 +237,8 @@ Item {
                         FeatureCard {
                             theme: root.theme
                             iconSource: "qrc:/icons/features/integrity.svg"
-                            title: qsTr("Integrity checked")
-                            description: qsTr("The SDK validates the container and its content hash.")
+                            title: qsTr("Checked for safety")
+                            description: qsTr("We verify your configuration before connecting.")
                             x: encryptedCard.width + 12
                             width: encryptedCard.width
                             height: parent.height
@@ -200,8 +246,8 @@ Item {
                         FeatureCard {
                             theme: root.theme
                             iconSource: "qrc:/icons/features/setup.svg"
-                            title: qsTr("Zero manual setup")
-                            description: qsTr("Endpoints and credentials are read from one verified profile.")
+                            title: qsTr("Simple to get started")
+                            description: qsTr("Import once and connect automatically.")
                             x: (encryptedCard.width + 12) * 2
                             width: encryptedCard.width
                             height: parent.height
@@ -294,15 +340,23 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: qsTr("Back")
+                            text: "←"
                             theme: root.theme
                             primary: false
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Back")
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: qsTr("Continue to PIN  →")
+                            text: "→"
                             theme: root.theme
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Continue to PIN  →")
                             enabled: root.controller.fileReady && !root.controller.busy
                             onClicked: root.controller.continueToPin()
                         }
@@ -373,15 +427,23 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: qsTr("Back")
+                            text: "←"
                             theme: root.theme
                             primary: false
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Back")
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: qsTr("Decrypt and validate  →")
+                            text: "→"
                             theme: root.theme
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Decrypt and validate  →")
                             enabled: root.controller.pin.length === 6 && !root.controller.busy
                             onClicked: root.controller.validatePin()
                         }
@@ -451,15 +513,23 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         AppButton {
-                            text: qsTr("Back to PIN")
+                            text: "←"
                             theme: root.theme
                             primary: false
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Back to PIN")
                             onClicked: root.controller.goBack()
                         }
                         Item { Layout.fillWidth: true }
                         AppButton {
-                            text: qsTr("Activate and continue to sign in  →")
+                            text: "→"
                             theme: root.theme
+                            compact: true
+                            Layout.preferredWidth: 48
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Activate and continue to sign in  →")
                             enabled: !root.controller.busy
                             onClicked: root.controller.confirmImport()
                         }
@@ -482,7 +552,7 @@ Item {
             }
             Item { Layout.fillWidth: true }
             Label {
-                text: qsTr("Version") + " " + root.controller.appVersion
+                text: qsTr("Version: %1").arg(root.controller.appVersionInfo)
                 color: root.theme.textMuted
                 font.pixelSize: 11
             }

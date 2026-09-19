@@ -22,8 +22,6 @@ class AppController final : public QObject
     Q_OBJECT
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(int importStep READ importStep NOTIFY importStepChanged)
-    Q_PROPERTY(QString stepTitle READ stepTitle NOTIFY uiTextChanged)
-    Q_PROPERTY(QString stepSubtitle READ stepSubtitle NOTIFY uiTextChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString busyMessage READ busyMessage NOTIFY busyChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
@@ -41,6 +39,7 @@ class AppController final : public QObject
     Q_PROPERTY(bool darkMode READ darkMode NOTIFY darkModeChanged)
     Q_PROPERTY(QString language READ language NOTIFY languageChanged)
     Q_PROPERTY(QString appVersion READ appVersion CONSTANT)
+    Q_PROPERTY(QString appVersionInfo READ appVersionInfo CONSTANT)
 
 public:
     enum Screen {
@@ -63,8 +62,6 @@ public:
 
     int screen() const { return m_screen; }
     int importStep() const { return m_importStep; }
-    QString stepTitle() const;
-    QString stepSubtitle() const;
     bool busy() const { return m_busy; }
     QString busyMessage() const { return m_busyMessage; }
     QString errorMessage() const { return m_errorMessage; }
@@ -82,6 +79,7 @@ public:
     bool darkMode() const { return m_darkMode; }
     QString language() const { return m_language; }
     QString appVersion() const;
+    QString appVersionInfo() const;
 
     void setPin(const QString &pin);
 
@@ -111,7 +109,6 @@ signals:
     void themeModeChanged();
     void darkModeChanged();
     void languageChanged();
-    void uiTextChanged();
 
 private slots:
     void handleTwoFactor();

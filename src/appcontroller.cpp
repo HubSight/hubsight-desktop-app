@@ -21,6 +21,28 @@
 namespace hubsight {
 namespace {
 
+constexpr qsizetype kHscfgMagicSize = 6;
+constexpr qsizetype kHscfgMinimumContainerSize =
+    kHscfgMagicSize + 32 + 12 + 16;
+const QByteArray kHscfgAdminMagic("HSCFG\x02", kHscfgMagicSize);
+
+enum class HscfgHeaderError {
+  None,
+  InvalidMagic,
+  Truncated,
+};
+
+HscfgHeaderError validateHscfgHeader(const QByteArray &bytes) {
+  if (bytes.size() < kHscfgMagicSize ||
+      bytes.left(kHscfgMagicSize) != kHscfgAdminMagic) {
+    return HscfgHeaderError::InvalidMagic;
+  }
+  if (bytes.size() < kHscfgMinimumContainerSize) {
+    return HscfgHeaderError::Truncated;
+  }
+  return HscfgHeaderError::None;
+}
+
 bool systemPrefersDarkMode() {
   const auto scheme = QGuiApplication::styleHints()->colorScheme();
   if (scheme == Qt::ColorScheme::Dark) {
@@ -371,6 +393,8 @@ void AppController::goBack() {
 void AppController::continueToPin() {
   if (m_screen == ImportScreen && !m_configBytes.isEmpty()) {
     setImportStep(PinStep);
+  } else if (m_screen == ImportScreen && m_importStep == FileStep) {
+    setError(tr("Select a valid configuration file before entering the PIN."));
   }
 }
 
@@ -383,6 +407,14 @@ bool AppController::loadConfigFile(const QUrl &url) {
     setError(tr("No configuration file was selected."));
     return false;
   }
+
+  // A new selection must never leave the previous valid file active if the
+  // replacement fails validation or cannot be read.
+  m_configBytes.clear();
+  m_fileName.clear();
+  m_config = {};
+  m_integrity = HubSight::Admin::HscfgIntegrityState::NotChecked;
+  emit fileChanged();
 
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -397,6 +429,17 @@ bool AppController::loadConfigFile(const QUrl &url) {
   const QByteArray bytes = file.readAll();
   if (bytes.isEmpty()) {
     setError(tr("The selected configuration is empty."));
+    return false;
+  }
+
+  switch (validateHscfgHeader(bytes)) {
+  case HscfgHeaderError::None:
+    break;
+  case HscfgHeaderError::InvalidMagic:
+    setError(tr("This file is not a valid HubSight configuration file."));
+    return false;
+  case HscfgHeaderError::Truncated:
+    setError(tr("This HubSight configuration file is incomplete."));
     return false;
   }
 
